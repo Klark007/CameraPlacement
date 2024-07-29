@@ -16,7 +16,7 @@ App::App(uint32_t res_x, uint32_t res_y, const std::string& camera_path, const s
 	setup_camera(fovy, near_plane, far_plane);
 	setup_renderpasses();
 
-	setup_placeable_cameras(near_plane, far_plane);
+	setup_placeable_cameras(camera_path, near_plane, far_plane);
 
 	gui = std::make_unique<GUI>(window, phong_shading_program, camera_names, camera_logos, near_plane, far_plane);
 	controller = std::make_unique<Controller>(fly_camera, camera_types, res_x, res_y);
@@ -192,6 +192,7 @@ void App::opengl_setup()
 #endif
 	glLineWidth(1);
 
+	// TODO: enable once received fixed asset (issue with normals in base asset)
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glFrontFace(GL_CW);
@@ -283,8 +284,32 @@ void App::setup_renderpasses()
 	msaa_main_pass->get_color_texture()->set_texture_unit(*post_process_program, 0);
 }
 
-void App::setup_placeable_cameras(float near_plane, float far_plane)
+void App::setup_placeable_cameras(const std::string& cameras_path, float near_plane, float far_plane)
 {
+	for (auto const& entry : std::filesystem::directory_iterator{ cameras_path }) {
+		std::cout << entry << std::endl;
+		if (std::filesystem::is_directory(entry)) {
+			std::filesystem::path path = entry.path();
+			camera_names.emplace_back(string_from_path(path.filename()));
+
+			std::shared_ptr<Texture> icon = create_texture_from_file("", string_from_path(path / "icon.png"));
+			camera_logos.emplace_back(icon);
+
+			rapidcsv::Document intrinsics_doc(string_from_path(path / "intrinsics.csv"), rapidcsv::LabelParams(-1, -1));
+			std::vector<float> intrinsics = intrinsics_doc.GetRow<float>(0);
+			float fovy = std::tanf(intrinsics[1] / intrinsics[0]);
+			camera_types.emplace_back(std::make_shared<Camera>(
+				glm::vec3(0, 0, 0),
+				glm::vec3(1, 0, 0),
+				glm::vec3(0, 1, 0),
+				intrinsics[2] * 2, intrinsics[3] * 2,
+				fovy,
+				near_plane,
+				far_plane
+			));
+		}
+	}
+	/*
 	camera_names.emplace_back("Kinect");
 	std::shared_ptr<Texture> kinect_texture = create_texture_from_file("", "textures\\kinect.png");
 	camera_logos.emplace_back(kinect_texture);
@@ -301,11 +326,7 @@ void App::setup_placeable_cameras(float near_plane, float far_plane)
 		near_plane,
 		far_plane
 	));
-
-
-	camera_names.emplace_back("GoPro");
-	std::shared_ptr<Texture> gopro_texture = create_texture_from_file("", "textures\\gopro.png");
-	camera_logos.emplace_back(gopro_texture);
+	*/
 }
 
 void App::resize_resources()
@@ -381,7 +402,7 @@ int main(int argc, char* argv[])
 
 	// start application
 	try {
-		App app{ 800, 600, program.get("-c"), program.get("-m"), program.get("-o"), glm::radians(45.0), 0.1, 2000.0};
+		App app{ 800, 600, program.get("-c"), program.get("-m"), program.get("-o"), glm::radians(45.0), 0.1, 25.0};
 		g_app = &app;
 
 		app.run();

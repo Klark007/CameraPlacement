@@ -78,7 +78,7 @@ private:
 	void setup_camera(float fovy, float near_plane, float far_plane);
 	void setup_renderpasses();
 
-	void setup_placeable_cameras(float near_plane, float far_plane);
+	void setup_placeable_cameras(const std::string& cameras_path, float near_plane, float far_plane);
 
 	bool resize_window = false;
 	void resize_resources(); // is called before each frame if glf_framebffer_size_callback sets resize to true
