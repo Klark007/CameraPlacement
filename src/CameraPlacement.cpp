@@ -192,9 +192,9 @@ void App::opengl_setup()
 #endif
 	glLineWidth(1);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CW);
 
 	// reverse z
 	//glDepthFunc(GL_GEQUAL);
