@@ -22,7 +22,7 @@ set(SOURCES src/CameraPlacement.cpp src/CameraPlacement.h "src/engine/Model.cpp"
     "src/engine/Mesh.cpp" "src/engine/Mesh.h" 
     "src/engine/Camera.cpp" "src/engine/Camera.h" 
     "src/engine/Exception.h" "src/engine/Exception.cpp"
-    "src/engine/Helper.h"
+    "src/engine/Helper.h" "src/engine/Helper.cpp"
     "src/Controller.cpp" "src/Controller.h"
     "src/Gui.cpp" "src/Gui.h" 
     "src/engine/Material.h" "src/engine/Material.cpp"
@@ -31,7 +31,9 @@ set(SOURCES src/CameraPlacement.cpp src/CameraPlacement.h "src/engine/Model.cpp"
     "src/engine/AABB.h" "src/engine/AABB.cpp" 
     "src/engine/Multisample_Renderpass.h" "src/engine/Multisample_Renderpass.cpp"
     "src/engine/Multisample_Texture.h" "src/engine/Multisample_Texture.cpp" 
-    "src/engine/interface/Texture_Interface.h" "src/engine/interface/Texture_Interface.cpp" "src/engine/Helper.cpp")
+    "src/engine/interface/Texture_Interface.h" "src/engine/interface/Texture_Interface.cpp"  
+    "src/Exporter.h"
+)
 
 set(IMGUI_DIR "external/imgui-master/")
 set(IMGUI_BACKEND_DIR "external/imgui-master/backends")
@@ -49,6 +51,15 @@ set(IMGUI_SOURCES ${IMGUI_DIR}"/imgui.h" ${IMGUI_DIR}"/imgui.cpp"
     ${IMGUI_BACKEND_DIR}"/imgui_impl_glfw.cpp" ${IMGUI_BACKEND_DIR}"/imgui_impl_glfw.h"
     ${IMGUI_BACKEND_DIR}"/imgui_impl_opengl3.cpp" ${IMGUI_BACKEND_DIR}"/imgui_impl_opengl3.h" ${IMGUI_BACKEND_DIR}"/imgui_impl_opengl3_loader.h"
 )
+
+# set standard version
+if (MSVC) # needed to enable use of __cplusplus macro
+    add_compile_options(/Zc:__cplusplus)
+endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED On)
+set(CMAKE_CXX_EXTENSIONS Off)
 
 add_executable (CameraPlacement ${SOURCES} ${IMGUI_SOURCES} "external/include/stb_image.h" "external/include/rapidcsv.h")
 

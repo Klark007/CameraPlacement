@@ -36,6 +36,7 @@ void GUI::render()
 
 	ImGui::Begin("Camera Placement GUI");
 
+	// select camera type
 	{
 		static ImGuiComboFlags flags = 0;
 		

@@ -12,19 +12,20 @@
 
 // variables that are set via gui
 struct GuiOutput {
-	float placement_distance = 0.1;
-
 	unsigned int selected_camera_type = 0;
 
-	bool toggle_aabb_drawing = false;
-	bool toggle_frustum_culling = false;
-	bool toggle_fxaa = false;
-	bool toggle_msaa = true;
+	float placement_distance = 0.1;
+
 
 	float camera_near_plane;
 	float camera_far_plane;
 	float camera_rotation_speed = 0.001;
 	float camera_movement_speed = 5.0;
+
+	bool toggle_aabb_drawing = false;
+	bool toggle_frustum_culling = false;
+	bool toggle_fxaa = false;
+	bool toggle_msaa = true;
 };
 
 class GUI {

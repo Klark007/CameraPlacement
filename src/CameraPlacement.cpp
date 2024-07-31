@@ -19,7 +19,7 @@ App::App(uint32_t res_x, uint32_t res_y, const std::string& camera_path, const s
 	setup_placeable_cameras(camera_path, near_plane, far_plane);
 
 	gui = std::make_unique<GUI>(window, phong_shading_program, camera_names, camera_logos, near_plane, far_plane);
-	controller = std::make_unique<Controller>(fly_camera, camera_types, res_x, res_y);
+	controller = std::make_unique<Controller>(fly_camera, camera_types, res_x, res_y, ouput_path);
 }
 
 App::~App()
@@ -34,24 +34,7 @@ void App::run()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
-		GuiOutput gui_variables = gui->get_gui_output();
-
-		current_camera = controller->get_current_camera();
-		current_camera->set_near_plane(gui_variables.camera_near_plane);
-		current_camera->set_far_plane(gui_variables.camera_far_plane);
-
-		if (resize_window) {
-			resize_resources();
-			resize_window = false;
-		}
-
-		controller->update_time();
-		controller->handle_keys(window);
-		controller->set_move_strength(gui_variables.camera_movement_speed);
-		controller->set_rotation_strength(gui_variables.camera_rotation_speed);
-		resize_window = resize_window || controller->set_camera_type(gui_variables.selected_camera_type);
-		
+		GuiOutput gui_variables = update();
 
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
 			recompile_shaders = true;
@@ -64,68 +47,97 @@ void App::run()
 
 			recompile_shaders = false;
 		}
-		
-		// render code begin
-		// 
-		// main pass begin
-		if (!gui_variables.toggle_msaa) {
-			main_pass->use();
-		}
-		else {
-			msaa_main_pass->use();
-		}
 
-		glm::mat4 view = current_camera->generate_view_mat();
-		glm::mat4 proj = current_camera->generate_projection_mat();
+		draw(gui_variables);
 
-		phong_shading_program->set_mat4f("model", glm::mat4(1.0));
-		phong_shading_program->set_mat4f("view", view);
-		phong_shading_program->set_mat4f("projection", proj);
-
-		glm::mat4 vp_mat = proj * current_camera->generate_virtual_view_mat();
-		
-		for (std::unique_ptr<Model>& model : models) {
-			model->draw(phong_shading_program, vp_mat, gui_variables.toggle_frustum_culling, gui_variables.toggle_aabb_drawing);
-		}
-
-		if (gui_variables.toggle_msaa) {
-			msaa_main_pass->resolve();
-		}
-
-		// main pass end
-
-		// post process pass begin
-		postprocess_pass->use();
-
-		if (!gui_variables.toggle_msaa) {
-			main_pass->get_color_texture()->bind();	
-		}
-		else {
-			msaa_main_pass->get_color_texture()->bind();
-		}
-		
-		post_process_program->set_vec2f("screen_res", res_x, res_y);
-		post_process_program->set_vec2f("uv_offset", uv_offset);
-		post_process_program->set_vec2f("uv_scale", uv_scale);
-		post_process_program->set1i("fxaa_enabled", gui_variables.toggle_fxaa);
-		post_process_program->set1i("cross.enabled", controller->can_move_round());
-
-		view_plane.draw();
-		// post process pass end
-		
-		// render code end
-
-		gui->render();
-
-		if (!gui_variables.toggle_msaa) {
-			resize_window = resize_window || controller->place_camera(window, main_pass, gui_variables.placement_distance);
-		}
-		else {
-			resize_window = resize_window || controller->place_camera(window, msaa_main_pass, gui_variables.placement_distance);
-		}
-
-		glfwSwapBuffers(window);
+		post_draw(gui_variables);
 	}
+}
+
+GuiOutput App::update()
+{
+	glfwPollEvents();
+	GuiOutput gui_variables = gui->get_gui_output();
+
+	current_camera = controller->get_current_camera();
+	current_camera->set_near_plane(gui_variables.camera_near_plane);
+	current_camera->set_far_plane(gui_variables.camera_far_plane);
+
+	if (resize_window) {
+		resize_resources();
+		resize_window = false;
+	}
+
+	controller->update_time();
+	controller->handle_keys(window, placed_cameras);
+	controller->set_move_strength(gui_variables.camera_movement_speed);
+	controller->set_rotation_strength(gui_variables.camera_rotation_speed);
+	resize_window = resize_window || controller->set_camera_type(gui_variables.selected_camera_type);
+
+	return gui_variables;
+}
+
+void App::draw(GuiOutput input)
+{
+	// main pass begin
+	if (!input.toggle_msaa) {
+		main_pass->use();
+	}
+	else {
+		msaa_main_pass->use();
+	}
+
+	glm::mat4 view = current_camera->generate_view_mat();
+	glm::mat4 proj = current_camera->generate_projection_mat();
+
+	phong_shading_program->set_mat4f("model", glm::mat4(1.0));
+	phong_shading_program->set_mat4f("view", view);
+	phong_shading_program->set_mat4f("projection", proj);
+
+	glm::mat4 vp_mat = proj * current_camera->generate_virtual_view_mat();
+
+	for (std::unique_ptr<Model>& model : models) {
+		model->draw(phong_shading_program, vp_mat, input.toggle_frustum_culling, input.toggle_aabb_drawing);
+	}
+
+	if (input.toggle_msaa) {
+		msaa_main_pass->resolve();
+	}
+
+	// main pass end
+
+	// post process pass begin
+	postprocess_pass->use();
+
+	if (!input.toggle_msaa) {
+		main_pass->get_color_texture()->bind();
+	}
+	else {
+		msaa_main_pass->get_color_texture()->bind();
+	}
+
+	post_process_program->set_vec2f("screen_res", res_x, res_y);
+	post_process_program->set_vec2f("uv_offset", uv_offset);
+	post_process_program->set_vec2f("uv_scale", uv_scale);
+	post_process_program->set1i("fxaa_enabled", input.toggle_fxaa);
+	post_process_program->set1i("cross.enabled", controller->can_move_round());
+
+	view_plane.draw();
+	// post process pass end
+
+	gui->render();
+}
+
+void App::post_draw(GuiOutput input)
+{
+	if (!input.toggle_msaa) {
+		resize_window = resize_window || controller->place_camera(window, main_pass, input.placement_distance, placed_cameras);
+	}
+	else {
+		resize_window = resize_window || controller->place_camera(window, msaa_main_pass, input.placement_distance, placed_cameras);
+	}
+
+	glfwSwapBuffers(window);
 }
 
 inline void App::glfw_init()
@@ -220,7 +232,7 @@ void App::load_models(const std::string& model_path)
 	view_plane = { vertices, indices};
 }
 
-void App::load_programs()
+void App::load_programs()	
 {
 	std::vector<std::shared_ptr<Shader>> phong_shaders;
 	phong_shaders.push_back(std::make_shared<Shader>(GL_VERTEX_SHADER, "shaders/phong.vs"));
@@ -297,36 +309,18 @@ void App::setup_placeable_cameras(const std::string& cameras_path, float near_pl
 
 			rapidcsv::Document intrinsics_doc(string_from_path(path / "intrinsics.csv"), rapidcsv::LabelParams(-1, -1));
 			std::vector<float> intrinsics = intrinsics_doc.GetRow<float>(0);
-			float fovy = std::tanf(intrinsics[1] / intrinsics[0]);
 			camera_types.emplace_back(std::make_shared<Camera>(
 				glm::vec3(0, 0, 0),
 				glm::vec3(1, 0, 0),
 				glm::vec3(0, 1, 0),
 				intrinsics[2] * 2, intrinsics[3] * 2,
-				fovy,
+				intrinsics[0],
+				intrinsics[1],
 				near_plane,
 				far_plane
 			));
 		}
 	}
-	/*
-	camera_names.emplace_back("Kinect");
-	std::shared_ptr<Texture> kinect_texture = create_texture_from_file("", "textures\\kinect.png");
-	camera_logos.emplace_back(kinect_texture);
-
-	rapidcsv::Document kinect_doc("intrinsics/kinect.csv", rapidcsv::LabelParams(-1, -1));
-	std::vector<float> kinect_intrinsics = kinect_doc.GetRow<float>(0);
-	float kinect_fovy = std::tanf(kinect_intrinsics[1] / kinect_intrinsics[0]);
-	camera_types.emplace_back(std::make_shared<Camera>(
-		glm::vec3(0,0,0),
-		glm::vec3(1,0,0),
-		glm::vec3(0,1,0),
-		kinect_intrinsics[2]*2, kinect_intrinsics[3]*2,
-		kinect_fovy,
-		near_plane,
-		far_plane
-	));
-	*/
 }
 
 void App::resize_resources()
@@ -382,7 +376,7 @@ int main(int argc, char* argv[])
 		.help("Path to folder where camera icon, intrinics and optionally transforms (for stereo cameras) are stored");
 
 	program.add_argument("-m", "-models")
-		.default_value("models/default")
+		.default_value("models\\default")
 		.required()
 		.help("Path to folder where models to be used are stored");
 

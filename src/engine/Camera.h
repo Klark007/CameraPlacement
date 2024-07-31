@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Exception.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -10,7 +11,8 @@ class Camera
 {
 public:
 	Camera() = default;
-	Camera(glm::vec3 pos, glm::vec3 des, glm::vec3 up, unsigned int res_x, unsigned int res_y, float fovy, float near_plane, float far_plane);
+	Camera(glm::vec3 pos, glm::vec3 des, glm::vec3 up, unsigned int res_x, unsigned int res_y, float focx, float focy, float near_plane, float far_plane);
+	Camera(glm::vec3 pos, glm::vec3 des, glm::vec3 up, unsigned int res_x, unsigned int res_y, float fov, float near_plane, float far_plane);
 
 	inline void set_pos(glm::vec3 pos) { position = pos; }
 	inline void look_at(glm::vec3 des) { set_dir(des - position); }
@@ -20,8 +22,10 @@ public:
 
 	inline void set_aspect_ratio(unsigned int r_x, unsigned int r_y);
 	inline void set_virtual_camera_enabled(bool enabled);
-	inline void roll_yaw(float d_yaw) { yaw += d_yaw; };
-	inline void roll_pitch(float d_pitch);
+	inline void roll_yaw(float d_yaw) { set_yaw(yaw + d_yaw); };
+	inline void roll_pitch(float d_pitch) { set_pitch(pitch + d_pitch); };
+	inline void set_yaw(float yaw) { this->yaw = yaw; };
+	inline void set_pitch(float pitch);
 	inline void set_near_plane(float near) { z_near = near; };
 	inline void set_far_plane(float far) { z_far = far; };
 private:
@@ -34,10 +38,11 @@ private:
 
 	unsigned int res_x;
 	unsigned int res_y;
-	float fovy;
+	float foc_x = -1; // set to invalid values if camera is constructed using fov and not focal length x and y
+	float foc_y = -1;
+	float fov;
 	float z_near;
 	float z_far;
-	glm::mat4 projection;
 
 	bool freeze_virtual_camera = false;
 	glm::mat4 virtual_view_mat;
@@ -50,6 +55,8 @@ public:
 	inline glm::vec3 get_des() const { return position + get_dir(); };
 	inline glm::vec3 get_dir() const;
 	inline glm::vec3 get_up() const;
+	inline float get_focal_len_x() const;
+	inline float get_focal_len_y() const;
 
 	inline float get_yaw() const { return yaw; };
 	inline float get_pitch() const { return pitch; };
@@ -83,11 +90,10 @@ inline void Camera::set_virtual_camera_enabled(bool enabled)
 	}
 }
 
-inline void Camera::roll_pitch(float d_pitch)
+inline void Camera::set_pitch(float pitch)
 {
-	pitch += d_pitch;
-	pitch = std::fmaxf(pitch, -M_PI_2 + 1e-5);
-	pitch = std::fminf(pitch,  M_PI_2 - 1e-5);
+	this->pitch = std::fmaxf(pitch, -M_PI_2 + 1e-5);
+	this->pitch = std::fminf(this->pitch, M_PI_2 - 1e-5);
 }
 
 inline glm::mat4 Camera::generate_view_mat() const
@@ -106,7 +112,7 @@ inline glm::mat4 Camera::generate_virtual_view_mat() const
 }
 
 inline glm::mat4 Camera::generate_projection_mat() const {
-	return glm::perspective(fovy, get_aspect_ratio(), z_near, z_far);
+	return glm::perspective(fov, get_aspect_ratio(), z_near, z_far);
 }
 
 inline glm::vec3 Camera::get_dir() const
@@ -131,6 +137,22 @@ inline glm::vec3 Camera::get_up() const
 	up.z = (float)(sin(yaw) * cos(up_pitch));
 
 	return up;
+}
+
+inline float Camera::get_focal_len_x() const
+{
+	if (foc_x == -1) {
+		throw RuntimeException("Tried to access focal length x of camera that was initalized with field of view", __FILE__, __LINE__);
+	}
+	return foc_x;
+}
+
+inline float Camera::get_focal_len_y() const
+{
+	if (foc_y == -1) {
+		throw RuntimeException("Tried to access focal length y of camera that was initalized with field of view", __FILE__, __LINE__);
+	}
+	return foc_y;
 }
 
 

@@ -13,10 +13,10 @@
 
 class Controller {
 public:
-	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y);
-	void handle_keys(GLFWwindow* window);
+	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder);
+	void handle_keys(GLFWwindow* window, const std::vector<std::pair<unsigned int, Camera>>& placed_cameras);
 	void handle_mouse(double xpos, double ypos);
-	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
+	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
 
 	void init_time();
 	void update_time();
@@ -43,6 +43,9 @@ private:
 
 	bool enter_pressed = false;
 	bool preview_mode = false;
+
+	bool export_pressed = false;
+	const std::string output_folder;
 
 	unsigned int current_camera_type;
 	std::shared_ptr<Camera> fly_camera;

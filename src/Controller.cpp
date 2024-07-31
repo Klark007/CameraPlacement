@@ -7,9 +7,15 @@
 #include <iostream>
 
 #include "engine/Helper.h"
+#include "Exporter.h"
 
-Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y)
-	: current_camera{ fly_cam }, fly_camera { fly_cam }, camera_types { cam_types }, xlast{res_x / 2}, ylast{res_y / 2}
+Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder)
+	: current_camera{ fly_cam }, 
+	  fly_camera { fly_cam },
+	  camera_types { cam_types }, 
+	  xlast{res_x / 2}, 
+	  ylast{res_y / 2},
+	  output_folder { output_folder }
 {
 
 }
@@ -28,7 +34,7 @@ void Controller::update_time()
 	prev_time = current_time;
 }
 
-void Controller::handle_keys(GLFWwindow* window)
+void Controller::handle_keys(GLFWwindow* window, const std::vector<std::pair<unsigned int, Camera>>& placed_cameras)
 {
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 		pause_pressed = true;
@@ -52,6 +58,14 @@ void Controller::handle_keys(GLFWwindow* window)
 		virtual_camera_freeze = !virtual_camera_freeze;
 
 		current_camera->set_virtual_camera_enabled(virtual_camera_freeze);
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		export_pressed = true;
+	}
+	else if (export_pressed && glfwGetKey(window, GLFW_KEY_E) == GLFW_RELEASE) {
+		export_cameras(placed_cameras, output_folder);
+		export_pressed = false;
 	}
 
 	if (!can_move || preview_mode)
@@ -100,7 +114,7 @@ void Controller::handle_mouse(double xpos, double ypos)
 	ylast = ypos;
 }
 
-bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance)
+bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras)
 {
 	if (!can_move)
 		return false;
@@ -108,7 +122,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && preview_mode) {
 		preview_mode = false;
 		current_camera = fly_camera;
-		return false;
+		return true;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
@@ -128,7 +142,8 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 
 			// set pos and flip direction (invert)
 			glm::vec3 destination = current_camera->get_pos() + current_camera->get_dir() * (linear_depth - placement_distance);
-			float pitch = -2 * current_camera->get_pitch();
+			float pitch = -current_camera->get_pitch();
+			float yaw = current_camera->get_yaw() + M_PI;
 
 			// switch cameras
 			current_camera = camera_types.at(current_camera_type);
@@ -136,15 +151,12 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 			current_camera->set_virtual_camera_enabled(virtual_camera_freeze);
 		
 			current_camera->set_pos(destination);
-			current_camera->roll_yaw(M_PI);
-			current_camera->roll_pitch(pitch);
+			current_camera->set_yaw(yaw);
+			current_camera->set_pitch(pitch);
 		}
 		else {
-			print_mat(current_camera->generate_projection_mat());
-
-
-			std::cout << "IMPLEMENT EXPORTING" << std::endl;
-
+			placed_cameras.emplace_back(std::make_pair(current_camera_type, *current_camera));
+			
 			current_camera = fly_camera;
 		}
 

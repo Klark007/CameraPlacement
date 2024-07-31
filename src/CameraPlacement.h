@@ -33,6 +33,8 @@
 #include <filesystem>
 #include <array>
 #include <string>
+#include <utility>
+
 
 class App {
 public:
@@ -40,6 +42,10 @@ public:
 	~App();
 	void run();
 private:
+	GuiOutput update();
+	void draw(GuiOutput input);
+	void post_draw(GuiOutput input);
+	
 	GLFWwindow* window;
 	uint32_t res_x, res_y;
 
@@ -50,8 +56,12 @@ private:
 	std::vector<std::shared_ptr<Texture>> camera_logos;
 	std::vector<std::shared_ptr<Camera>> camera_types;
 
+
 	std::shared_ptr<Camera> fly_camera;
 	std::shared_ptr<Camera> current_camera;
+
+	// cameras placed in scene and their corresponding type index
+	std::vector<std::pair<unsigned int, Camera>> placed_cameras;
 
 	std::vector<std::unique_ptr<Model>> models;
 	Mesh view_plane;

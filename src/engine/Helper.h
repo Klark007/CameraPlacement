@@ -13,6 +13,8 @@ void print_mat(const glm::mat4& m);
 
 std::string string_from_path(const std::filesystem::path& path);
 
+glm::vec3 rodrigues(glm::mat3 R);
+
 inline glm::vec3 aiVector3ToGlm(const aiVector3D from) {
     glm::vec3 to;
 
