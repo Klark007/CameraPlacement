@@ -5,6 +5,7 @@
 
 #include "engine/Camera.h"
 #include "engine/Renderpass.h"
+#include "Exporter.h"
 
 #include <memory>
 #include <vector>

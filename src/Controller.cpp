@@ -7,7 +7,6 @@
 #include <iostream>
 
 #include "engine/Helper.h"
-#include "Exporter.h"
 
 Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder)
 	: current_camera{ fly_cam }, 
