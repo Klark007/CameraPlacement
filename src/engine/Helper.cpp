@@ -13,6 +13,23 @@ void print_vec(const glm::vec3& p) {
 	std::cout << "(" << p.x << "," << p.y << "," << p.z << ")" << std::endl;
 }
 
+void print_vec(const glm::vec4& p) {
+	std::cout << "(" << p.x << "," << p.y << "," << p.z << "," << p.w << ")" << std::endl;
+}
+
+void print_mat(const glm::mat3& m) {
+	// glm is column major
+	// mat is a vector of columns 
+	std::cout << "(" << std::fixed << std::setprecision(3) << std::endl;
+	for (unsigned int i = 0; i < 3; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			std::cout << std::setfill(' ') << std::setw(6) << m[j][i] << ",";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << ")" << std::defaultfloat << std::setprecision(6) << std::endl;
+}
+
 void print_mat(const glm::mat4& m) {
 	// glm is column major
 	// mat is a vector of columns 
@@ -41,7 +58,7 @@ std::string string_from_path(const std::filesystem::path& path)
 
 // opencv2 implementation using glm
 // modules/calib3d/src/calibration.cpp
-glm::vec3 rodriguez(glm::mat3 R)
+glm::vec3 rodrigues(glm::mat3 R)
 {
 	glm::vec3 r;
 

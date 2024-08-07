@@ -9,6 +9,8 @@
 #include <filesystem>
 
 void print_vec(const glm::vec3& p);
+void print_vec(const glm::vec4& p);
+void print_mat(const glm::mat3& m);
 void print_mat(const glm::mat4& m);
 
 std::string string_from_path(const std::filesystem::path& path);
