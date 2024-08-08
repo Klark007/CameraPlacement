@@ -16,7 +16,6 @@ public:
 
 	inline void set_pos(glm::vec3 pos) { position = pos; }
 	inline void look_at(glm::vec3 des) { set_dir(des - position); }
-	inline void set_up(glm::vec3 up) { this->up = glm::normalize(up); }
 	
 	inline void set_dir(glm::vec3 dir);
 
@@ -30,7 +29,6 @@ public:
 	inline void set_far_plane(float far) { z_far = far; };
 private:
 	glm::vec3 position;
-	glm::vec3 up;
 	
 	// glm::vec3 direction;
 	float yaw;
@@ -49,6 +47,7 @@ private:
 
 public:
 	inline glm::mat4 generate_view_mat() const;
+	inline glm::mat4 generate_view_mat_LHS() const;
 	inline glm::mat4 generate_virtual_view_mat() const;
 	inline glm::mat4 generate_projection_mat() const;
 	inline glm::vec3 get_pos() const { return position; };
@@ -99,6 +98,11 @@ inline void Camera::set_pitch(float pitch)
 inline glm::mat4 Camera::generate_view_mat() const
 {
 	return glm::lookAt(position, position + get_dir(), get_up());
+}
+
+inline glm::mat4 Camera::generate_view_mat_LHS() const
+{	
+	return glm::lookAtLH(position, position + get_dir(), get_up());
 }
 
 inline glm::mat4 Camera::generate_virtual_view_mat() const

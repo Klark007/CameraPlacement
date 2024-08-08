@@ -298,11 +298,12 @@ void App::setup_renderpasses()
 
 void App::setup_placeable_cameras(const std::string& cameras_path, float near_plane, float far_plane)
 {
+	std::cout << "Cameras found" << std::endl;
 	for (auto const& entry : std::filesystem::directory_iterator{ cameras_path }) {
-		std::cout << entry << std::endl;
 		if (std::filesystem::is_directory(entry)) {
 			std::filesystem::path path = entry.path();
 			camera_names.emplace_back(string_from_path(path.filename()));
+			std::cout << path.filename() << std::endl;
 
 			std::shared_ptr<Texture> icon = create_texture_from_file("", string_from_path(path / "icon.png"));
 			camera_logos.emplace_back(icon);
