@@ -19,7 +19,7 @@
 enum CoordinateSystem {
     Z_UP,
     Y_UP,
-    Synthetic // see: https://github.com/robinjacobs/SyntheticCheckerboardTrajectories
+    Synthetic // LHS plus y down see: https://github.com/robinjacobs/SyntheticCheckerboardTrajectories
 };
 
 struct ExportSettings {
