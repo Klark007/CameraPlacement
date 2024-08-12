@@ -19,7 +19,7 @@ App::App(uint32_t res_x, uint32_t res_y, const std::string& camera_path, const s
 	setup_placeable_cameras(camera_path, near_plane, far_plane);
 
 	gui = std::make_unique<GUI>(window, phong_shading_program, camera_names, camera_logos, near_plane, far_plane);
-	controller = std::make_unique<Controller>(fly_camera, camera_types, res_x, res_y, ouput_path);
+	controller = std::make_unique<Controller>(fly_camera, camera_types, camera_logos, res_x, res_y, ouput_path);
 }
 
 App::~App()
@@ -106,11 +106,27 @@ void App::draw(GuiOutput input)
 
 	// draw frustums
 	if (input.preview_frustums) {
-		phong_shading_program->set_mat4f("model", glm::mat4(1.0));
 
-		for (std::unique_ptr<Frustum>& frustum : frustums) {
-			frustum->draw(phong_shading_program);
+		for (std::shared_ptr<CameraPreview>& preview : placed_cameras) {
+			preview->set_dir(current_camera->get_dir());
+			preview->draw_frustum(phong_shading_program);
 		}
+	}
+
+	// draw icons
+	if (input.preview_icon) {
+		// overwrite the currently used programm set by renderpass
+		textured_program->use();
+		textured_program->set_mat4f("model", glm::mat4(1.0));
+		textured_program->set_mat4f("view", view);
+		textured_program->set_mat4f("projection", proj);
+
+		for (std::shared_ptr<CameraPreview>& preview : placed_cameras) {
+			preview->set_dir(current_camera->get_dir());
+			preview->draw_icon(textured_program);
+		}
+
+		phong_shading_program->use();
 	}
 
 	if (input.toggle_msaa) {
@@ -145,10 +161,10 @@ void App::post_draw(GuiOutput input)
 {
 	// if we switch to preview mode, we might need to resize the frame buffers due to different aspect ratio
 	if (!input.toggle_msaa) {
-		resize_window = resize_window || controller->place_camera(window, main_pass, input.placement_distance, placed_cameras, frustums, input.preview_far_plane_scale);
+		resize_window = resize_window || controller->place_camera(window, main_pass, placed_cameras, input);
 	}
 	else {
-		resize_window = resize_window || controller->place_camera(window, msaa_main_pass, input.placement_distance, placed_cameras, frustums, input.preview_far_plane_scale);
+		resize_window = resize_window || controller->place_camera(window, msaa_main_pass, placed_cameras, input);
 	}
 
 	glfwSwapBuffers(window);
@@ -218,6 +234,10 @@ void App::opengl_setup()
 #endif
 	glLineWidth(1);
 	glPointSize(4);
+	
+	// enable for transparent icons
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// TODO: enable once received fixed asset (issue with normals in base asset)
 	// glEnable(GL_CULL_FACE);
@@ -254,6 +274,11 @@ void App::load_programs()
 	phong_shaders.push_back(std::make_shared<Shader>(GL_VERTEX_SHADER, "shaders/phong.vs"));
 	phong_shaders.push_back(std::make_shared<Shader>(GL_FRAGMENT_SHADER, "shaders/phong.fs"));
 	phong_shading_program = std::make_shared<Program>(phong_shaders);
+
+	std::vector<std::shared_ptr<Shader>> textured_shaders;
+	textured_shaders.push_back(std::make_shared<Shader>(GL_VERTEX_SHADER, "shaders/textured.vs"));
+	textured_shaders.push_back(std::make_shared<Shader>(GL_FRAGMENT_SHADER, "shaders/textured.fs"));
+	textured_program = std::make_shared<Program>(textured_shaders);
 
 	std::vector<std::shared_ptr<Shader>> postprocess_shaders;
 	postprocess_shaders.push_back(std::make_shared<Shader>(GL_VERTEX_SHADER, "shaders/postprocess.vs"));

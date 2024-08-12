@@ -3,6 +3,7 @@
 #include "engine/Exception.h"
 #include "engine/Camera.h"
 #include "engine/Helper.h"
+#include "CameraPreview.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
@@ -29,9 +30,9 @@ struct ExportSettings {
     CoordinateSystem cs;
 };
 
-void export_cameras_to_file(const std::vector<std::pair<unsigned int, Camera>>& placed_cameras, const std::string& path, ExportSettings settings);
+void export_cameras_to_file(const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, const std::string& path, ExportSettings settings);
 
-inline void export_cameras(const std::vector<std::pair<unsigned int, Camera>>& placed_cameras, const std::string& output_folder) {
+inline void export_cameras(const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, const std::string& output_folder) {
     auto time = std::chrono::floor<std::chrono::seconds>(std::chrono::system_clock::now());
     auto today = std::chrono::floor<std::chrono::days>(time);
 

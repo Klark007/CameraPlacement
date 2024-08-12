@@ -8,10 +8,11 @@
 
 #include "engine/Helper.h"
 
-Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder)
+Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, double res_x, double res_y, const std::string& output_folder)
 	: current_camera{ fly_cam }, 
 	  fly_camera { fly_cam },
 	  camera_types { cam_types }, 
+	  camera_logos { camera_logos },
 	  xlast{res_x / 2}, 
 	  ylast{res_y / 2},
 	  output_folder { output_folder }
@@ -33,7 +34,7 @@ void Controller::update_time()
 	prev_time = current_time;
 }
 
-void Controller::handle_keys(GLFWwindow* window, const std::vector<std::pair<unsigned int, Camera>>& placed_cameras)
+void Controller::handle_keys(GLFWwindow* window, const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras)
 {
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 		pause_pressed = true;
@@ -116,7 +117,7 @@ void Controller::handle_mouse(double xpos, double ypos)
 	ylast = ypos;
 }
 
-bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras, std::vector<std::unique_ptr<Frustum>>& frustums, float far_plane_scale)
+bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, GuiOutput gui_variables)
 {
 	if (!can_move)
 		return false;
@@ -147,7 +148,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 			float linear_depth = current_camera->linearize_depth(nl_depth);
 
 			// set pos and flip direction (invert)
-			glm::vec3 destination = current_camera->get_pos() + current_camera->get_dir() * (linear_depth - placement_distance);
+			glm::vec3 destination = current_camera->get_pos() + current_camera->get_dir() * (linear_depth - gui_variables.placement_distance);
 			
 			// invert cameras direction
 			float pitch = -current_camera->get_pitch();
@@ -164,8 +165,9 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 		}
 		else {
 			// record cameras position into list
-			placed_cameras.emplace_back(std::make_pair(current_camera_type, *current_camera));
-			frustums.emplace_back(std::make_unique<Frustum>(current_camera, far_plane_scale));
+			Frustum f{ current_camera, gui_variables.preview_far_plane_scale };
+			Billboard b{ current_camera->get_pos(), gui_variables.preview_icon_scale, camera_logos.at(current_camera_type)};
+			placed_cameras.emplace_back(std::make_shared<CameraPreview>(current_camera_type, *current_camera, f, b));
 			
 			current_camera = fly_camera;
 		}

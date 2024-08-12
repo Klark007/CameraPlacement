@@ -23,7 +23,7 @@
 
 #include "engine/Model.h"
 #include "engine/Mesh.h"
-#include "engine/Frustum.h"
+#include "CameraPreview.h"
 
 #include "Gui.h"
 #include "Controller.h"
@@ -63,8 +63,7 @@ private:
 	std::shared_ptr<Camera> current_camera;
 
 	// cameras placed in scene and their corresponding type index
-	std::vector<std::pair<unsigned int, Camera>> placed_cameras;
-	std::vector<std::unique_ptr<Frustum>> frustums;
+	std::vector<std::shared_ptr<CameraPreview>> placed_cameras;
 
 	// list of loaded models
 	std::vector<std::unique_ptr<Model>> models;
@@ -72,8 +71,9 @@ private:
 	Mesh view_plane;
 
 	// programs used
-	std::shared_ptr<Program> phong_shading_program;
-	std::shared_ptr<Program> post_process_program;
+	std::shared_ptr<Program> phong_shading_program; // phong shading
+	std::shared_ptr<Program> textured_program; // flat color from texture for icons
+	std::shared_ptr<Program> post_process_program; // post process effects such as fxaa and the cross
 
 	std::array<float, 4> clear_color{ 0.0f, 0.0f, 0.0f, 0.0f };
 

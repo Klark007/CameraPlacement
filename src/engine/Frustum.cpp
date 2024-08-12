@@ -1,8 +1,5 @@
 #include "Frustum.h"
 
-#include <iostream>
-#include "Helper.h"
-
 Frustum::Frustum(std::shared_ptr<Camera> camera, float far_plane_scale)
 {
 	std::vector<Vertex> vertices;
@@ -58,6 +55,7 @@ Frustum::Frustum(std::shared_ptr<Camera> camera, float far_plane_scale)
 
 void Frustum::draw(std::shared_ptr<Program> program) const
 {
+	program->set_mat4f("model", glm::mat4(1.0));
 	material.bind(program);
 	mesh.draw();
 	point.draw();

@@ -96,8 +96,10 @@ void GUI::render()
 		}
 
 		if (ImGui::CollapsingHeader("Preview cameras")) {
-			ImGui::Checkbox("Preview camera frustums", &output.preview_frustums);
+			ImGui::Checkbox("Show camera frustums", &output.preview_frustums);
+			ImGui::Checkbox("Show camera icons", &output.preview_icon);
 			ImGui::SliderFloat("Frustum far plane scale", &output.preview_far_plane_scale, 0.01f, 1.0f);
+			ImGui::SliderFloat("Camera icon scale", &output.preview_icon_scale, 0.01f, 0.3f);
 		}
 
 #ifdef DEBUG

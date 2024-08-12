@@ -5,7 +5,8 @@
 
 #include "engine/Camera.h"
 #include "engine/Renderpass.h"
-#include "engine/Frustum.h"
+#include "CameraPreview.h"
+#include "Gui.h"
 #include "Exporter.h"
 
 #include <memory>
@@ -15,10 +16,10 @@
 
 class Controller {
 public:
-	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder);
-	void handle_keys(GLFWwindow* window, const std::vector<std::pair<unsigned int, Camera>>& placed_cameras);
+	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, double res_x, double res_y, const std::string& output_folder);
+	void handle_keys(GLFWwindow* window, const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras);
 	void handle_mouse(double xpos, double ypos);
-	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras, std::vector<std::unique_ptr<Frustum>>& frustums, float far_plane_scale); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
+	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, GuiOutput gui_variables); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
 
 	void init_time();
 	void update_time();
@@ -59,6 +60,7 @@ private:
 	unsigned int current_camera_type;
 	std::shared_ptr<Camera> fly_camera;
 	std::vector<std::shared_ptr<Camera>> camera_types;
+	std::vector<std::shared_ptr<Texture>> camera_logos;
 public:
 	inline void set_move_strength(float strength) { move_strength = strength; };
 	inline void set_rotation_strength(float strength) { rot_strength = strength; };

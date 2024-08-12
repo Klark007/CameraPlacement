@@ -3,11 +3,11 @@
 #include "opencv2/calib3d/calib3d.hpp"
 
 // modify as needed
-void export_cameras_to_file(const std::vector<std::pair<unsigned int, Camera>>& placed_cameras, const std::string& path, ExportSettings settings) {
+void export_cameras_to_file(const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, const std::string& path, ExportSettings settings) {
     std::ofstream output_file(path);
     if (output_file.is_open()) {
         for (unsigned int i = 0; i < placed_cameras.size(); i++) {
-            Camera camera = placed_cameras.at(i).second;
+            Camera camera = placed_cameras.at(i)->get_camera();
 
             glm::mat4 view_mat = camera.generate_view_mat();
             

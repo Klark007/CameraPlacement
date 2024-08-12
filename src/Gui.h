@@ -23,7 +23,10 @@ struct GuiOutput {
 	float camera_movement_speed = 5.0;
 
 	bool preview_frustums = true;
+	bool preview_icon = true;
+	// updating those will only change the next camera placed
 	float preview_far_plane_scale = 0.25;
+	float preview_icon_scale = 0.05;
 
 	bool toggle_aabb_drawing = false;
 	bool toggle_frustum_culling = false;
