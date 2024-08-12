@@ -303,7 +303,7 @@ inline void App::setup_camera(float fovy, float near_plane, float far_plane)
 
 void App::setup_renderpasses()
 {
-	glm::vec4 clear_color = glm::vec4(1, 0, 1, 1);
+	glm::vec4 clear_color = glm::vec4(0.68, 0.68, 0.68, 1);
 	float depth_clear_value = 1.0;
 
 	main_pass = std::make_shared<Renderpass>(
@@ -339,7 +339,7 @@ void App::setup_renderpasses()
 
 void App::setup_placeable_cameras(const std::string& cameras_path, float near_plane, float far_plane)
 {
-	std::cout << "Cameras found" << std::endl;
+	std::cout << "Cameras found:" << std::endl;
 	for (auto const& entry : std::filesystem::directory_iterator{ cameras_path }) {
 		if (std::filesystem::is_directory(entry)) {
 			std::filesystem::path path = entry.path();
