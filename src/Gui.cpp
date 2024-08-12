@@ -94,6 +94,12 @@ void GUI::render()
 			ImGui::Checkbox("Perform msaa (recommended)", &output.toggle_msaa);
 			ImGui::Checkbox("Perform fxaa", &output.toggle_fxaa);
 		}
+
+		if (ImGui::CollapsingHeader("Preview cameras")) {
+			ImGui::Checkbox("Preview camera frustums", &output.preview_frustums);
+			ImGui::SliderFloat("Frustum far plane scale", &output.preview_far_plane_scale, 0.01f, 1.0f);
+		}
+
 #ifdef DEBUG
 		ImGui::Checkbox("Show bounding boxes", &output.toggle_aabb_drawing);
 #endif

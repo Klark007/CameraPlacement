@@ -5,6 +5,7 @@
 
 #include "engine/Camera.h"
 #include "engine/Renderpass.h"
+#include "engine/Frustum.h"
 #include "Exporter.h"
 
 #include <memory>
@@ -17,7 +18,7 @@ public:
 	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, double res_x, double res_y, const std::string& output_folder);
 	void handle_keys(GLFWwindow* window, const std::vector<std::pair<unsigned int, Camera>>& placed_cameras);
 	void handle_mouse(double xpos, double ypos);
-	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
+	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras, std::vector<std::unique_ptr<Frustum>>& frustums, float far_plane_scale); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
 
 	void init_time();
 	void update_time();

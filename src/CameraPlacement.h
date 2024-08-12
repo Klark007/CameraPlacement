@@ -23,6 +23,7 @@
 
 #include "engine/Model.h"
 #include "engine/Mesh.h"
+#include "engine/Frustum.h"
 
 #include "Gui.h"
 #include "Controller.h"
@@ -63,6 +64,7 @@ private:
 
 	// cameras placed in scene and their corresponding type index
 	std::vector<std::pair<unsigned int, Camera>> placed_cameras;
+	std::vector<std::unique_ptr<Frustum>> frustums;
 
 	// list of loaded models
 	std::vector<std::unique_ptr<Model>> models;

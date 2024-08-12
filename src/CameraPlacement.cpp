@@ -104,6 +104,15 @@ void App::draw(GuiOutput input)
 		model->draw(phong_shading_program, vp_mat, input.toggle_frustum_culling, input.toggle_aabb_drawing);
 	}
 
+	// draw frustums
+	if (input.preview_frustums) {
+		phong_shading_program->set_mat4f("model", glm::mat4(1.0));
+
+		for (std::unique_ptr<Frustum>& frustum : frustums) {
+			frustum->draw(phong_shading_program);
+		}
+	}
+
 	if (input.toggle_msaa) {
 		msaa_main_pass->resolve(); // blit to resolve msaa pass
 	}
@@ -136,10 +145,10 @@ void App::post_draw(GuiOutput input)
 {
 	// if we switch to preview mode, we might need to resize the frame buffers due to different aspect ratio
 	if (!input.toggle_msaa) {
-		resize_window = resize_window || controller->place_camera(window, main_pass, input.placement_distance, placed_cameras);
+		resize_window = resize_window || controller->place_camera(window, main_pass, input.placement_distance, placed_cameras, frustums, input.preview_far_plane_scale);
 	}
 	else {
-		resize_window = resize_window || controller->place_camera(window, msaa_main_pass, input.placement_distance, placed_cameras);
+		resize_window = resize_window || controller->place_camera(window, msaa_main_pass, input.placement_distance, placed_cameras, frustums, input.preview_far_plane_scale);
 	}
 
 	glfwSwapBuffers(window);
@@ -208,6 +217,7 @@ void App::opengl_setup()
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE); // disable notifications
 #endif
 	glLineWidth(1);
+	glPointSize(4);
 
 	// TODO: enable once received fixed asset (issue with normals in base asset)
 	// glEnable(GL_CULL_FACE);

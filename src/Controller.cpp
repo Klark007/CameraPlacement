@@ -116,7 +116,7 @@ void Controller::handle_mouse(double xpos, double ypos)
 	ylast = ypos;
 }
 
-bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras)
+bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, float placement_distance, std::vector<std::pair<unsigned int, Camera>>& placed_cameras, std::vector<std::unique_ptr<Frustum>>& frustums, float far_plane_scale)
 {
 	if (!can_move)
 		return false;
@@ -165,6 +165,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 		else {
 			// record cameras position into list
 			placed_cameras.emplace_back(std::make_pair(current_camera_type, *current_camera));
+			frustums.emplace_back(std::make_unique<Frustum>(current_camera, far_plane_scale));
 			
 			current_camera = fly_camera;
 		}

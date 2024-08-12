@@ -32,8 +32,9 @@ set(SOURCES src/CameraPlacement.cpp src/CameraPlacement.h "src/engine/Model.cpp"
     "src/engine/Multisample_Renderpass.h" "src/engine/Multisample_Renderpass.cpp"
     "src/engine/Multisample_Texture.h" "src/engine/Multisample_Texture.cpp" 
     "src/engine/interface/Texture_Interface.h" "src/engine/interface/Texture_Interface.cpp"  
-    "src/Exporter.h"
- "src/Exporter.cpp")
+    "src/Exporter.h" "src/Exporter.cpp" 
+    "src/engine/Frustum.h" "src/engine/Frustum.cpp"
+)
 
 set(IMGUI_DIR "external/imgui-master/")
 set(IMGUI_BACKEND_DIR "external/imgui-master/backends")

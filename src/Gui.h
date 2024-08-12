@@ -22,6 +22,9 @@ struct GuiOutput {
 	float camera_rotation_speed = 0.001;
 	float camera_movement_speed = 5.0;
 
+	bool preview_frustums = true;
+	float preview_far_plane_scale = 0.25;
+
 	bool toggle_aabb_drawing = false;
 	bool toggle_frustum_culling = false;
 	bool toggle_fxaa = false;
