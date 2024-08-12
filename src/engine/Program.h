@@ -15,6 +15,8 @@
 #define LOG_LENGTH 512
 #define UPDATE_UNIFORM_IF_CHANGED false
 
+// Programm interface for setting uniforms, compiling and linking shaders etc
+
 struct Uniform;
 
 class Program
@@ -37,7 +39,7 @@ private:
 
 	std::unordered_set<std::shared_ptr<Shader>> shaders;
 	std::unordered_map<std::string, Uniform> uniform_values; // stores uniform values which are used if recompiling shaders
-	std::unordered_map<std::string, int> uniform_locations;
+	std::unordered_map<std::string, int> uniform_locations; // cache uniform locations
 
 	std::unordered_map<std::string, int> get_uniform_locations();
 	int get_location(const std::string& name);

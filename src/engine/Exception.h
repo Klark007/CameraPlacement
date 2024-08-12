@@ -4,6 +4,8 @@
 #include <format>
 #include <exception>
 
+// Custom exception for error handling
+
 class CameraPlacementException : public std::exception {
 public:
 	CameraPlacementException(const std::string& msg, const std::string& file, int line);
@@ -16,6 +18,7 @@ protected:
 	const std::string format_msg;
 };
 
+// outputs the line and file the exception was thrown at
 inline CameraPlacementException::CameraPlacementException(const std::string& msg, const std::string& file, int line)
 	: msg {msg}, file {file}, line {line}, format_msg { std::format("[{}] at line {} {}", file, line, msg) }
 {

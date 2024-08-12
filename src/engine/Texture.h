@@ -2,6 +2,8 @@
 
 #include "interface/Texture_Interface.h"
 
+// Texture class for creating, loading textures
+
 class Texture : public Texture_Interface
 {
 public:

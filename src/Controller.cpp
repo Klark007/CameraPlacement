@@ -67,6 +67,7 @@ void Controller::handle_keys(GLFWwindow* window, const std::vector<std::pair<uns
 		export_pressed = false;
 	}
 
+	// dont move in preview or paused mode
 	if (!can_move || preview_mode)
 		return;
 
@@ -95,6 +96,7 @@ void Controller::handle_keys(GLFWwindow* window, const std::vector<std::pair<uns
 
 void Controller::handle_mouse(double xpos, double ypos)
 {
+	// dont rotate in paused
 	if (!can_move) {
 		xlast = xpos;
 		ylast = ypos;
@@ -105,6 +107,7 @@ void Controller::handle_mouse(double xpos, double ypos)
 	double dy = ypos - ylast;
 
 	if (dx != 0 || dy != 0) {
+		// update yaw and pitch of camera
 		current_camera->roll_yaw((current_camera->points_up() ? dx : -dx) * rot_strength);
 		current_camera->roll_pitch(-dy * rot_strength);
 	}
@@ -118,6 +121,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 	if (!can_move)
 		return false;
 
+	// leave preview mode by pressing esc
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && preview_mode) {
 		preview_mode = false;
 		current_camera = fly_camera;
@@ -131,6 +135,9 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 		enter_pressed = false;
 
 		if (!preview_mode) {
+			// switch to preview mode
+
+			// calculate depth at center of screen
 			float nl_depth = renderpass->sample_depth(0.5, 0.5);
 
 			if (nl_depth > 1 - 1e-8) {
@@ -141,6 +148,8 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 
 			// set pos and flip direction (invert)
 			glm::vec3 destination = current_camera->get_pos() + current_camera->get_dir() * (linear_depth - placement_distance);
+			
+			// invert cameras direction
 			float pitch = -current_camera->get_pitch();
 			float yaw = current_camera->get_yaw() + M_PI;
 
@@ -154,6 +163,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 			current_camera->set_pitch(pitch);
 		}
 		else {
+			// record cameras position into list
 			placed_cameras.emplace_back(std::make_pair(current_camera_type, *current_camera));
 			
 			current_camera = fly_camera;

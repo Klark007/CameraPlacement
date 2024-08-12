@@ -2,20 +2,19 @@
 An OpenGL app for placing calibrated cameras into 3d models.
 
 ## Controls
-WASD for movement, Mouse for Looking around.
-Enter goes into preview mode for in GUI selected camera.
-While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
-Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
+- WASD for movement, Mouse for Looking around.
+- Enter goes into preview mode for in GUI selected camera. While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
+- Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
 
 ## Commandline rguments
--c or --cameras: Path to folder where camera icon, intrinics and optionally transforms (for stereo cameras) are stored
--m or --models: Path to folder where models to be used are stored
--o or --output: Path to folder where camera intrinics and extrinics are exported to as csv files
+- -c or --cameras: Path to folder where camera icon, intrinics and optionally transforms (for stereo cameras) are stored
+- -m or --models: Path to folder where models to be used are stored
+- -o or --output: Path to folder where camera intrinics and extrinics are exported to as csv files
 
 ## Adding more camera types
 One folder per camera in the path given by -c (by default cameras/). Folder name corresponds to the name of the camera.
-icon.png: Icon of the camera used for gui. Ideally 1024x1024 pixels
-intrinics.csv: Calibrated intrinsics of camera with format: fx, fy, cx, cy. The app assumes that the resolution of the camera is (2 x c_x, 2 x c_y)
+- icon.png: Icon of the camera used for gui. Ideally 1024x1024 pixels
+- intrinics.csv: Calibrated intrinsics of camera with format: fx, fy, cx, cy. The app assumes that the resolution of the camera is (2 x c_x, 2 x c_y)
 
 ## Installation
 Build either using Visual Studio directly

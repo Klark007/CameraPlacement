@@ -7,6 +7,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+// Camera class which can generate view and projection matrices
+
 class Camera
 {
 public:
@@ -91,6 +93,7 @@ inline void Camera::set_virtual_camera_enabled(bool enabled)
 
 inline void Camera::set_pitch(float pitch)
 {
+	// limit pitch
 	this->pitch = std::fmaxf(pitch, -M_PI_2 + 1e-5);
 	this->pitch = std::fminf(this->pitch, M_PI_2 - 1e-5);
 }
@@ -102,6 +105,7 @@ inline glm::mat4 Camera::generate_view_mat() const
 
 inline glm::mat4 Camera::generate_view_mat_LHS() const
 {	
+	// LHS lookAt for exporting
 	return glm::lookAtLH(position, position + get_dir(), get_up());
 }
 
@@ -119,6 +123,7 @@ inline glm::mat4 Camera::generate_projection_mat() const {
 	return glm::perspective(fov, get_aspect_ratio(), z_near, z_far);
 }
 
+// calculate dir given yaw and pitch
 inline glm::vec3 Camera::get_dir() const
 {
 	glm::vec3 dir;
@@ -130,6 +135,7 @@ inline glm::vec3 Camera::get_dir() const
 	return dir;
 }
 
+// calculate up given yaw and pitch (dir pitched up by PI/2)
 inline glm::vec3 Camera::get_up() const
 {
 	glm::vec3 up;
@@ -159,7 +165,7 @@ inline float Camera::get_focal_len_y() const
 	return foc_y;
 }
 
-
+// compute linear depth
 inline float Camera::linearize_depth(float d) const
 {
 	return z_near * z_far / (z_far + d * (z_near - z_far));

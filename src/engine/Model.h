@@ -13,6 +13,8 @@
 #include <unordered_set>
 #include  <tuple>
 
+// Class for model loading given file
+
 class Model {
 public:
 	Model(const std::string& file_path);

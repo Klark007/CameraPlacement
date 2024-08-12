@@ -35,6 +35,7 @@
 #include <string>
 #include <utility>
 
+// app handling setup, libraries and interactions between systems
 
 class App {
 public:
@@ -56,21 +57,25 @@ private:
 	std::vector<std::shared_ptr<Texture>> camera_logos;
 	std::vector<std::shared_ptr<Camera>> camera_types;
 
-
+	// list of engine cameras
 	std::shared_ptr<Camera> fly_camera;
 	std::shared_ptr<Camera> current_camera;
 
 	// cameras placed in scene and their corresponding type index
 	std::vector<std::pair<unsigned int, Camera>> placed_cameras;
 
+	// list of loaded models
 	std::vector<std::unique_ptr<Model>> models;
+	// mesh for post processing steps
 	Mesh view_plane;
 
+	// programs used
 	std::shared_ptr<Program> phong_shading_program;
 	std::shared_ptr<Program> post_process_program;
 
 	std::array<float, 4> clear_color{ 0.0f, 0.0f, 0.0f, 0.0f };
 
+	// render passes
 	std::shared_ptr<Renderpass> main_pass;
 	std::shared_ptr<MSAA_Renderpass> msaa_main_pass;
 	std::shared_ptr<Renderpass> postprocess_pass;
@@ -91,15 +96,16 @@ private:
 	void setup_placeable_cameras(const std::string& cameras_path, float near_plane, float far_plane);
 
 	bool resize_window = false;
-	void resize_resources(); // is called before each frame if glf_framebffer_size_callback sets resize to true
+	void resize_resources(); // is called before each frame if should_resize sets resize to true
 
 	bool recompile_shaders = false;
 public:
-	std::unique_ptr<Controller> controller;
+	std::unique_ptr<Controller> controller; // manages input
 
 	inline void should_resize(uint32_t new_res_x, uint32_t new_res_y);
 };
 
+// function called by glfw_framebuffer_size_callback
 inline void App::should_resize(uint32_t new_res_x, uint32_t new_res_y)
 {
 	res_x = new_res_x;

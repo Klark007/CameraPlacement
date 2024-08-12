@@ -10,7 +10,8 @@ void export_cameras_to_file(const std::vector<std::pair<unsigned int, Camera>>& 
             Camera camera = placed_cameras.at(i).second;
 
             glm::mat4 view_mat = camera.generate_view_mat();
-            // want camera to world transform instead of world to camera that is given by the view matrix
+            
+            // might want camera to world transform instead of world to camera that is given by the view matrix
             glm::mat4 cam_to_world = glm::mat4(1);
             cam_to_world[0] = glm::transpose(view_mat)[0];
             cam_to_world[1] = glm::transpose(view_mat)[1];
@@ -57,7 +58,6 @@ void export_cameras_to_file(const std::vector<std::pair<unsigned int, Camera>>& 
                 rot_vec = rodrigues(world_to_cam);
                 trans_vec = glm::vec3(world_to_cam[3]);
 
-                // switch at export
                 // 0-2 rotation
                 output_file << rot_vec.x << "," << rot_vec.y << "," << rot_vec.z << ",";
                 // 3-5 translation

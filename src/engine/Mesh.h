@@ -4,6 +4,8 @@
 
 #include <vector>
 
+// Mesh handles sending vertices and indices to the gpu
+
 struct Vertex {
 	glm::vec3 position;
 	glm::vec3 normal;

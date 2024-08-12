@@ -19,15 +19,19 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Index> indices, unsigned in
 	
 	glCreateVertexArrays(1, &vao);
 
+	// vertices
 	glCreateBuffers(1, &vbo);
 	glNamedBufferStorage(vbo, vertices.size() * sizeof(Vertex), vertices.data(), GL_DYNAMIC_STORAGE_BIT);
 
+	// indices
 	glCreateBuffers(1, &ibo);
 	glNamedBufferStorage(ibo, indices.size() * sizeof(Index), indices.data(), GL_DYNAMIC_STORAGE_BIT);
 
+
 	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(Vertex));
 	glVertexArrayElementBuffer(vao, ibo);
-	
+
+	// vertex attributes
 	glEnableVertexArrayAttrib(vao, 0);
 	glEnableVertexArrayAttrib(vao, 1);
 	glEnableVertexArrayAttrib(vao, 2);

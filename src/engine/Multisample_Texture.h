@@ -2,6 +2,8 @@
 
 #include "interface/Texture_Interface.h"
 
+// Multisample Texture
+
 class Multisample_Texture : public Texture_Interface {
 public:
 	Multisample_Texture(const std::string& n, unsigned int res_x, unsigned int res_y, unsigned int samples, int i_form);

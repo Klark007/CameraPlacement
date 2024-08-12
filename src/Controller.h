@@ -29,25 +29,32 @@ private:
 	float rot_strength = 0.001;
 	float move_strength = 5.0;
 
+	// previous mouse position
 	double xlast;
 	double ylast;
 
+	// tracking delta time
 	double current_time;
 	double prev_time;
 	double delta_time;
 
+	// pause movement
 	bool pause_pressed = false; // toggle can move
 	bool can_move = true;
 
+	// freeze virtual camera (important to test frustum culling) for culling while still moving
 	bool virtual_freeze_pressed = false; // toggle virtual camera freeze
 	bool virtual_camera_freeze = false;
 
+	// switch to preview mode
 	bool enter_pressed = false;
 	bool preview_mode = false;
 
+	// export camera list
 	bool export_pressed = false;
 	const std::string output_folder;
 
+	// current camera used
 	unsigned int current_camera_type;
 	std::shared_ptr<Camera> fly_camera;
 	std::vector<std::shared_ptr<Camera>> camera_types;
@@ -65,6 +72,7 @@ inline bool Controller::set_camera_type(unsigned int camera_type)
 {
 	bool change_camera = current_camera_type != camera_type && preview_mode;
 	if (change_camera) {
+		// if we switch camera during preview mode, update it to current camera values
 		std::shared_ptr<Camera> camera = camera_types.at(camera_type);
 		camera->set_pos(current_camera->get_pos());
 		camera->set_dir(current_camera->get_dir());

@@ -6,6 +6,8 @@
 
 #include <memory>
 
+// Material class containing values etc for shading
+
 class Material {
 public:
 	Material(aiColor4t<float> diffuse, aiColor4t<float> specular, aiColor4t<float> ambient, aiColor4t<float> emissive, float shininess);

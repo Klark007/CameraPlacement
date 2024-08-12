@@ -6,6 +6,7 @@
 
 #define LOG_LENGTH 512
 
+// Class for storing shaders and recompiling on the fly
 
 class Shader
 {

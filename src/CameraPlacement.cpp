@@ -30,8 +30,10 @@ App::~App()
 
 void App::run()
 {
+	// for tracking delta time
 	controller->init_time();
 
+	// game loop
 	while (!glfwWindowShouldClose(window))
 	{
 		GuiOutput gui_variables = update();
@@ -90,18 +92,20 @@ void App::draw(GuiOutput input)
 	glm::mat4 view = current_camera->generate_view_mat();
 	glm::mat4 proj = current_camera->generate_projection_mat();
 
+	// set matrices
 	phong_shading_program->set_mat4f("model", glm::mat4(1.0));
 	phong_shading_program->set_mat4f("view", view);
 	phong_shading_program->set_mat4f("projection", proj);
 
 	glm::mat4 vp_mat = proj * current_camera->generate_virtual_view_mat();
 
+	// draw models
 	for (std::unique_ptr<Model>& model : models) {
 		model->draw(phong_shading_program, vp_mat, input.toggle_frustum_culling, input.toggle_aabb_drawing);
 	}
 
 	if (input.toggle_msaa) {
-		msaa_main_pass->resolve();
+		msaa_main_pass->resolve(); // blit to resolve msaa pass
 	}
 
 	// main pass end
@@ -120,7 +124,7 @@ void App::draw(GuiOutput input)
 	post_process_program->set_vec2f("uv_offset", uv_offset);
 	post_process_program->set_vec2f("uv_scale", uv_scale);
 	post_process_program->set1i("fxaa_enabled", input.toggle_fxaa);
-	post_process_program->set1i("cross.enabled", controller->can_move_round());
+	post_process_program->set1i("cross.enabled", controller->can_move_round()); // to toggle cross in center of screen
 
 	view_plane.draw();
 	// post process pass end
@@ -130,6 +134,7 @@ void App::draw(GuiOutput input)
 
 void App::post_draw(GuiOutput input)
 {
+	// if we switch to preview mode, we might need to resize the frame buffers due to different aspect ratio
 	if (!input.toggle_msaa) {
 		resize_window = resize_window || controller->place_camera(window, main_pass, input.placement_distance, placed_cameras);
 	}
@@ -205,9 +210,9 @@ void App::opengl_setup()
 	glLineWidth(1);
 
 	// TODO: enable once received fixed asset (issue with normals in base asset)
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
-	//glFrontFace(GL_CW);
+	// glEnable(GL_CULL_FACE);
+	// glCullFace(GL_BACK);
+	// glFrontFace(GL_CW);
 
 	// reverse z
 	//glDepthFunc(GL_GEQUAL);
@@ -222,6 +227,7 @@ void App::load_models(const std::string& model_path)
 		models.emplace_back(std::make_unique<Model>(string_from_path(entry.path())));
 	}
 
+	// hard coded view plane
 	std::vector<Vertex> vertices = {
 		{glm::vec3(0.0,0.0,0.0), glm::vec3(0.0,1.0,0.0), glm::vec2(0.0,0.0)},
 		{glm::vec3(0.0,0.0,1.0), glm::vec3(0.0,1.0,0.0), glm::vec2(0.0,1.0)},
@@ -414,12 +420,14 @@ void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "GLFW Error: %s\n", description);
 }
 
+// call apps appropriate function
 void glfw_framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	if (g_app != nullptr) {
 		g_app->should_resize(width, height);
 	}
 }
 
+// call controllers appropriate function
 void glfm_mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (g_app != nullptr) {
@@ -428,6 +436,7 @@ void glfm_mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 
+// opengl error handling
 void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param)
 {
 	auto const src_str = [source]() {

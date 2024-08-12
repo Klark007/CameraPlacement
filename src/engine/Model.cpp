@@ -19,12 +19,11 @@ Model::Model(const std::string& file_path)
       instances{ std::vector<std::pair<unsigned int, glm::mat4>>()}
 {
     Assimp::Importer importer;
-    //importer.SetPropertyBool(AI_CONFIG_PP_FD_REMOVE, true);
 
     const aiScene* scene = importer.ReadFile(file_path,
         (aiProcessPreset_TargetRealtime_MaxQuality ^ aiProcess_SplitLargeMeshes) | // disable split large meshes
-        aiProcess_FlipWindingOrder | 
-        aiProcess_GenBoundingBoxes
+        aiProcess_FlipWindingOrder | // for culling
+        aiProcess_GenBoundingBoxes   // create AABB
     );
     // output winding order is counter clockwise
 
@@ -32,6 +31,7 @@ Model::Model(const std::string& file_path)
         throw IOException("Model not found at " + file_path, __FILE__, __LINE__);
     }
 
+    // store materials
     for (unsigned int material_idx = 0; material_idx < scene->mNumMaterials; material_idx++) {
         aiMaterial* material = scene->mMaterials[material_idx];
         aiColor4t<float> diffuse, specular, ambient, emissive;
@@ -46,6 +46,7 @@ Model::Model(const std::string& file_path)
         materials.emplace_back(Material(diffuse, specular, ambient, emissive, shininess));
     }
 
+    // store meshes
     for (unsigned int mesh_idx = 0; mesh_idx < scene->mNumMeshes; mesh_idx++) {
         // create mesh
         aiMesh* mesh = scene->mMeshes[mesh_idx];
@@ -80,6 +81,7 @@ Model::Model(const std::string& file_path)
         }
 
 #ifdef DEBUG
+        // use only triangles, lines and points; model should be triagulated by assimp
         if (nr_vertices_per_face > 3) {
             throw IOException("Model " + file_path + " Mesh " + std::to_string(mesh_idx) + +" failed triangulation", __FILE__, __LINE__);
         }
@@ -110,10 +112,12 @@ Model::Model(const std::string& file_path)
         });
     }
 
+    // load instances of meshes
     load_scene(scene, scene->mRootNode, glm::mat4(1));
 
     std::cout << file_path << ":" << instances.size() << std::endl;
 
+    // init for culling
     instance_culled = std::vector<bool>(instances.size(), false);
     idx_range = std::vector<unsigned int>((size_t) std::ceil((double) instances.size() / THREAD_WORK_AMOUNT));
     std::iota(idx_range.begin(), idx_range.end(), 0);
@@ -122,6 +126,7 @@ Model::Model(const std::string& file_path)
 void Model::draw(std::shared_ptr<Program> program, const glm::mat4& vp_mat, bool frustum_culling, bool draw_aabb)
 {
     if (frustum_culling) {
+        // cull aabb's
         auto cull_lambda = [&](unsigned int i) {
             unsigned int size_lim = std::min(THREAD_WORK_AMOUNT * (i + 1), (unsigned int) instance_culled.size());
             for (unsigned int j = THREAD_WORK_AMOUNT * i; j < size_lim; j++) {
@@ -142,7 +147,7 @@ void Model::draw(std::shared_ptr<Program> program, const glm::mat4& vp_mat, bool
         );
     }
     
-
+    // draw meshes
     for (unsigned int i = 0; i < instances.size(); i++) {
         const auto& [mesh_idx, transform] = instances.at(i);
         const auto& [material_idx, mesh, aabb] = meshes.at(mesh_idx);

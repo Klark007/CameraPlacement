@@ -7,6 +7,8 @@
 
 #include <memory>
 
+// Renderpass encompassing clearing buffers, setting up textures for rendering into 
+
 // TODO: support for depth only Renderpass
 class Renderpass {
 public:

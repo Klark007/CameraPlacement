@@ -4,6 +4,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
+
 GUI::GUI(GLFWwindow* window, std::shared_ptr<Program> program, std::vector<std::string> camera_names, std::vector<std::shared_ptr<Texture>> camera_logos, float near_plane, float far_plane)
 	: program{ program },
 	  cameras_labels { camera_names },
@@ -36,12 +37,9 @@ void GUI::render()
 
 	ImGui::Begin("Camera Placement GUI");
 
-	// select camera type
+	// select camera type with drop down selection
 	{
 		static ImGuiComboFlags flags = 0;
-		
-		// General BeginCombo() API, you have full control over your selection data and display type.
-		// (your selection data could be an index, a pointer to the object, an id for the object, a flag stored in the object itself, etc.)
 		
 		const char* item_current = cameras_labels.at(output.selected_camera_type).c_str();            // Here our selection is a single pointer stored outside the object.
 		if (ImGui::BeginCombo("Select camera", item_current, flags)) // The second parameter is the label previewed before opening the combo.
@@ -57,10 +55,12 @@ void GUI::render()
 					item_current = i_label.c_str();
 					output.selected_camera_type = i;
 				}
+
 				ImVec2 rect_min = ImGui::GetItemRectMin();
 				ImVec2 rect_max = ImGui::GetItemRectMax();
 				rect_max.x = rect_min.x + 32;
 
+				// show icon in drop down selection
 				std::shared_ptr<Texture> texture = camera_logos.at(i);
 				ImGui::SameLine(); 
 				ImGui::Image((void*)texture->get_id(), ImVec2(texture->get_width() / 64, texture->get_height() / 64));
@@ -73,8 +73,8 @@ void GUI::render()
 
 	}
 
+	// settings
 	ImGui::SliderFloat("Placement distance", &output.placement_distance, 0.0f, 0.5f);
-	
 
 	if (ImGui::CollapsingHeader("Settings"))
 	{

@@ -8,7 +8,7 @@
 
 #include <memory>
 
-
+// used to handle and setup gui
 
 // variables that are set via gui
 struct GuiOutput {

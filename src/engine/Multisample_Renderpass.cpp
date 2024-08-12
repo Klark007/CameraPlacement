@@ -7,6 +7,7 @@ MSAA_Renderpass::MSAA_Renderpass(unsigned int res_x, unsigned int res_y, std::sh
 {
 	glCreateFramebuffers(1, &multisample_framebuffer_id);
 
+	// create additional multisample textures
 	multisample_color_texture = std::make_shared<Multisample_Texture>(
 		std::string("frame_color_msaa"),
 		res_x, res_y, nr_samples,
@@ -59,6 +60,7 @@ void MSAA_Renderpass::use()
 
 void MSAA_Renderpass::resolve()
 {
+	// blit multisample textures into (single sample) textures
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisample_framebuffer_id);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_id);
 

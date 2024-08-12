@@ -16,6 +16,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+// Used to export the current placed cameras into csv files
+
 enum CoordinateSystem {
     Z_UP,
     Y_UP,
@@ -43,4 +45,5 @@ inline void export_cameras(const std::vector<std::pair<unsigned int, Camera>>& p
     export_cameras_to_file(placed_cameras, output_folder + "/camera_poses.csv", blender_settings);
     export_cameras_to_file(placed_cameras, output_folder + "/camera_poses_cv2.csv", opencv_settings);
     export_cameras_to_file(placed_cameras, output_folder + "/tmp/" + datetime + "_camera_poses.csv", blender_settings);
+    export_cameras_to_file(placed_cameras, output_folder + "/tmp/" + datetime + "_camera_poses_cv2.csv", opencv_settings);
 };

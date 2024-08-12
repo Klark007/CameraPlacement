@@ -1,5 +1,7 @@
 #pragma once
 
+// Renderpass implementing MSAA
+
 #include "Renderpass.h"
 #include "Multisample_Texture.h"
 

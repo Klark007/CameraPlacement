@@ -8,6 +8,8 @@
 
 #include <filesystem>
 
+// Usefull helper functions for printing etc
+
 void print_vec(const glm::vec3& p);
 void print_vec(const glm::vec4& p);
 void print_mat(const glm::mat3& m);
@@ -15,7 +17,7 @@ void print_mat(const glm::mat4& m);
 
 std::string string_from_path(const std::filesystem::path& path);
 
-glm::vec3 rodrigues(glm::mat3 R);
+glm::vec3 rodrigues(glm::mat3 R); // calls opencv rodrigues function
 
 inline glm::vec3 aiVector3ToGlm(const aiVector3D from) {
     glm::vec3 to;

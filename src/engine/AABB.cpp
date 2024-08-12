@@ -2,6 +2,7 @@
 
 AABB::AABB(glm::vec3 min, glm::vec3 max)
 {
+	// hard coded vertices
 	vertices = {
 		{glm::vec3(min.x,min.y,min.z),glm::vec3(1), glm::vec2(0)}, // 0
 		{glm::vec3(max.x,min.y,min.z),glm::vec3(1), glm::vec2(0)}, // 1
@@ -13,6 +14,7 @@ AABB::AABB(glm::vec3 min, glm::vec3 max)
 		{glm::vec3(max.x,max.y,max.z),glm::vec3(1), glm::vec2(0)}, // 7
 	};
 
+	// AABB drawing only enabled in debug mode
 #ifdef DEBUG
 	std::vector<Index> indices = {
 		// left face

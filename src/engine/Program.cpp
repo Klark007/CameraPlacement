@@ -135,6 +135,7 @@ void Program::throw_if_link_error()
 
 std::shared_ptr<Program> Program::conditional_recompile(std::shared_ptr<Program> program)
 {
+	// try to recompile but only change if it compiles correctly
 	try {
 		return std::make_shared<Program>(program->get_shaders(), program->get_uniform_values_map(), program->get_uniform_locations_map());
 	}
