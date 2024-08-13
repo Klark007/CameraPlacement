@@ -11,12 +11,13 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
 // handles user i/o from window using glfw
 
 class Controller {
 public:
-	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, double res_x, double res_y, const std::string& output_folder);
+	Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, std::vector<std::string> camera_labels, double res_x, double res_y, const std::string& output_folder);
 	void handle_keys(GLFWwindow* window, const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras);
 	void handle_mouse(double xpos, double ypos);
 	bool place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> renderpass, std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, GuiOutput gui_variables); // if enter pressed, goes to rotation mode at position determined by depth texture; returns true if need to resize
@@ -61,6 +62,8 @@ private:
 	std::shared_ptr<Camera> fly_camera;
 	std::vector<std::shared_ptr<Camera>> camera_types;
 	std::vector<std::shared_ptr<Texture>> camera_logos;
+	std::vector<std::string> camera_labels;
+	std::vector<unsigned int> camera_count;
 public:
 	inline void set_move_strength(float strength) { move_strength = strength; };
 	inline void set_rotation_strength(float strength) { rot_strength = strength; };

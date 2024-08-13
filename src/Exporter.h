@@ -42,6 +42,9 @@ inline void export_cameras(const std::vector<std::shared_ptr<CameraPreview>>& pl
     // outputs both to a dated version and a most recent one
     ExportSettings blender_settings{ true, Z_UP };
     ExportSettings opencv_settings{ false, Synthetic };
+    
+    std::cout << "Exporting " << placed_cameras.size() << " cameras" << std::endl;
+
     export_cameras_to_file(placed_cameras, output_folder + "/camera_poses.csv", blender_settings);
     export_cameras_to_file(placed_cameras, output_folder + "/camera_poses_cv2.csv", opencv_settings);
     export_cameras_to_file(placed_cameras, output_folder + "/tmp/" + datetime + "_camera_poses.csv", blender_settings);

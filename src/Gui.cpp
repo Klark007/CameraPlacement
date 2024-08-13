@@ -80,7 +80,7 @@ void GUI::render(std::vector<std::shared_ptr<CameraPreview>>& placed_cameras)
 		ImGui::Text("Press button to remove camera from list");
 		for (auto it = placed_cameras.cbegin(); it != placed_cameras.cend() /* not hoisted */; /* no increment */)
 		{
-			if (ImGui::Button(cameras_labels.at((*it)->get_camera_type()).c_str()))
+			if (ImGui::Button((*it)->get_name().c_str()))
 			{
 				it = placed_cameras.erase(it);    // or "it = m.erase(it)" since C++11
 			}

@@ -14,7 +14,7 @@ An OpenGL app for placing calibrated cameras into 3d models.
 *Preview from a Kinect placed in the room*
 
 ![Render](https://github.com/Klark007/CameraPlacement/blob/main/Frustum.PNG)
-*Showing placed camera's frustum*
+*Displaying placed camera's frustum*
 
 ## Controls
 - WASD for movement, Mouse for Looking around.

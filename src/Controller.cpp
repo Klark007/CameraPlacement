@@ -8,16 +8,17 @@
 
 #include "engine/Helper.h"
 
-Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, double res_x, double res_y, const std::string& output_folder)
+Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, std::vector<std::string> camera_labels, double res_x, double res_y, const std::string& output_folder)
 	: current_camera{ fly_cam }, 
 	  fly_camera { fly_cam },
 	  camera_types { cam_types }, 
 	  camera_logos { camera_logos },
+	  camera_labels {camera_labels},
 	  xlast{res_x / 2}, 
 	  ylast{res_y / 2},
 	  output_folder { output_folder }
 {
-
+	camera_count = std::vector<unsigned int>(camera_types.size(), 0);
 }
 
 // initilaized seperately from object to have timer more precise for first frame
@@ -167,7 +168,10 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 			// record cameras position into list
 			Frustum f{ current_camera, gui_variables.preview_far_plane_scale };
 			Billboard b{ current_camera->get_pos(), gui_variables.preview_icon_scale, camera_logos.at(current_camera_type)};
-			placed_cameras.emplace_back(std::make_shared<CameraPreview>(current_camera_type, *current_camera, f, b));
+			
+			camera_count.at(current_camera_type) += 1;
+			std::string name = camera_labels.at(current_camera_type) + "-" + std::to_string(camera_count.at(current_camera_type));
+			placed_cameras.emplace_back(std::make_shared<CameraPreview>(current_camera_type, name, *current_camera, f, b));
 			
 			current_camera = fly_camera;
 		}

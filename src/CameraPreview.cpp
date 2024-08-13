@@ -1,7 +1,7 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(unsigned int type, const Camera& camera, const Frustum& frustum, const Billboard& billboard)
-	: camera_type {type}, camera { camera }, frustum {frustum}, icon { billboard }
+CameraPreview::CameraPreview(unsigned int type, const std::string& name, const Camera& camera, const Frustum& frustum, const Billboard& billboard)
+	: camera_type {type}, name {name}, camera{camera}, frustum{frustum}, icon{billboard}
 {
 }
 

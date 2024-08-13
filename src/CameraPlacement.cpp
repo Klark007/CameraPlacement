@@ -19,7 +19,7 @@ App::App(uint32_t res_x, uint32_t res_y, const std::string& camera_path, const s
 	setup_placeable_cameras(camera_path, near_plane, far_plane);
 
 	gui = std::make_unique<GUI>(window, phong_shading_program, camera_names, camera_logos, near_plane, far_plane);
-	controller = std::make_unique<Controller>(fly_camera, camera_types, camera_logos, res_x, res_y, ouput_path);
+	controller = std::make_unique<Controller>(fly_camera, camera_types, camera_logos, camera_names, res_x, res_y, ouput_path);
 }
 
 App::~App()
