@@ -8,7 +8,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
 
-#include  <utility>
 #include <iostream>
 #include <fstream>
 #include <chrono>

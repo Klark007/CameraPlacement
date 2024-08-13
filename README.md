@@ -8,10 +8,10 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - Using camera calibrations for accurate previews
 
 ![Render](https://github.com/Klark007/CameraPlacement/blob/main/Render.PNG)
-* View from camera flying around scene *
+*View from camera flying around scene*
 
-* ![Render](https://github.com/Klark007/CameraPlacement/blob/main/Preview.PNG)
-* Preview from a Kinect placed in the room *
+![Render](https://github.com/Klark007/CameraPlacement/blob/main/Preview.PNG)
+*Preview from a Kinect placed in the room*
 
 ## Controls
 - WASD for movement, Mouse for Looking around.

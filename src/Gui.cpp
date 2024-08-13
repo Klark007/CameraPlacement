@@ -31,7 +31,7 @@ GUI::~GUI()
 	ImGui::DestroyContext();
 }
 
-void GUI::render()
+void GUI::render(std::vector<std::shared_ptr<CameraPreview>>& placed_cameras)
 {
 	imgui_frame_start();
 
@@ -76,30 +76,53 @@ void GUI::render()
 	// settings
 	ImGui::SliderFloat("Placement distance", &output.placement_distance, 0.0f, 0.5f);
 
+	if (ImGui::CollapsingHeader("Placed cameras")) {
+		ImGui::Text("Press button to remove camera from list");
+		for (auto it = placed_cameras.cbegin(); it != placed_cameras.cend() /* not hoisted */; /* no increment */)
+		{
+			if (ImGui::Button(cameras_labels.at((*it)->get_camera_type()).c_str()))
+			{
+				it = placed_cameras.erase(it);    // or "it = m.erase(it)" since C++11
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
 	if (ImGui::CollapsingHeader("Settings"))
 	{
-		if (ImGui::CollapsingHeader("Camera movement")) {
+		if (ImGui::TreeNode("Camera movement")) {
 			ImGui::SliderFloat("Camera movement speed", &output.camera_movement_speed, 1.0f, 25.0f);
 			ImGui::SliderFloat("Camera rotation speed", &output.camera_rotation_speed, 0.0005, 0.005);
+
+			ImGui::TreePop();
 		}
 
-		if (ImGui::CollapsingHeader("Camera Near and Far plane")) {
+		if (ImGui::TreeNode("Camera Near and Far plane")) {
 			ImGui::SliderFloat("Camera near plane", &output.camera_near_plane, 0.01f, 0.1f);
 			ImGui::SliderFloat("Camera far plane", &output.camera_far_plane, 10.0f, 2500.0f);
+
+			ImGui::TreePop();
 		}
 
 		ImGui::Checkbox("Perform frustum culling", &output.toggle_frustum_culling);
 		
-		if (ImGui::CollapsingHeader("Anti-alisiang")) {
+		if (ImGui::TreeNode("Anti-alisiang")) {
 			ImGui::Checkbox("Perform msaa (recommended)", &output.toggle_msaa);
 			ImGui::Checkbox("Perform fxaa", &output.toggle_fxaa);
+
+			ImGui::TreePop();
 		}
 
-		if (ImGui::CollapsingHeader("Preview cameras")) {
+		if (ImGui::TreeNode("Preview cameras")) {
 			ImGui::Checkbox("Show camera frustums", &output.preview_frustums);
 			ImGui::Checkbox("Show camera icons", &output.preview_icon);
 			ImGui::SliderFloat("Frustum far plane scale", &output.preview_far_plane_scale, 0.01f, 1.0f);
 			ImGui::SliderFloat("Camera icon scale", &output.preview_icon_scale, 0.01f, 0.3f);
+
+			ImGui::TreePop();
 		}
 
 #ifdef DEBUG

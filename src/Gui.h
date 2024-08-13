@@ -5,8 +5,10 @@
 
 #include "engine/Program.h"
 #include "engine/Texture.h"
+#include "CameraPreview.h"
 
 #include <memory>
+#include <vector>
 
 // used to handle and setup gui
 
@@ -38,7 +40,7 @@ class GUI {
 public:
 	GUI(GLFWwindow* window, std::shared_ptr<Program> program, std::vector<std::string> camera_names, std::vector<std::shared_ptr<Texture>> camera_logos, float near_plane, float far_plane);
 	~GUI();
-	void render();
+	void render(std::vector<std::shared_ptr<CameraPreview>>& placed_cameras);
 private:
 	std::shared_ptr<Program> program;
 

@@ -154,7 +154,7 @@ void App::draw(GuiOutput input)
 	view_plane.draw();
 	// post process pass end
 
-	gui->render();
+	gui->render(placed_cameras);
 }
 
 void App::post_draw(GuiOutput input)
