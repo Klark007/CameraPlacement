@@ -22,6 +22,7 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
 
 ## Commandline rguments
+- -cwd: Path to which all paths below are relative to
 - -c or --cameras: Path to folder where camera icon, intrinics and optionally transforms (for stereo cameras) are stored
 - -m or --models: Path to folder where models to be used are stored
 - -o or --output: Path to folder where camera intrinics and extrinics are exported to as csv files

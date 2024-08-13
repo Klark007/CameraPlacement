@@ -400,17 +400,14 @@ void App::resize_resources()
 
 int main(int argc, char* argv[])
 {
-	// set path
-	std::filesystem::path cwd = std::filesystem::current_path();
-	cwd = cwd.parent_path().parent_path().parent_path();
-	std::filesystem::current_path(cwd);
-
-	std::cout << "CWD:" << std::filesystem::current_path() << std::endl;
-
-
 	// parse arguments 
 	// document with https://tree.nathanfriend.io/
 	argparse::ArgumentParser program("Camera Placement");
+
+	program.add_argument("-cwd")
+		.default_value("..\\..\\..")
+		.required()
+		.help("Path to where all files are local to");
 
 	program.add_argument("-c", "-cameras")
 		.default_value("cameras")
@@ -435,6 +432,13 @@ int main(int argc, char* argv[])
 		std::cerr << program;
 		return 1;
 	}
+
+	// set path
+	std::filesystem::path cwd = std::filesystem::current_path();
+	cwd = program.get("-cwd");
+	std::filesystem::current_path(cwd);
+
+	std::cout << "CWD:" << std::filesystem::current_path() << std::endl;
 
 	// start application
 	try {
