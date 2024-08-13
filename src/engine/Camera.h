@@ -94,8 +94,8 @@ inline void Camera::set_virtual_camera_enabled(bool enabled)
 inline void Camera::set_pitch(float pitch)
 {
 	// limit pitch
-	this->pitch = std::fmaxf(pitch, -M_PI_2 + 1e-5);
-	this->pitch = std::fminf(this->pitch, M_PI_2 - 1e-5);
+	this->pitch = std::fmaxf(pitch, (float) (- M_PI_2 + 1e-5));
+	this->pitch = std::fminf(this->pitch, (float) (M_PI_2 - 1e-5));
 }
 
 inline glm::mat4 Camera::generate_view_mat() const
@@ -140,7 +140,7 @@ inline glm::vec3 Camera::get_up() const
 {
 	glm::vec3 up;
 	
-	float up_pitch = pitch + M_PI_2;
+	float up_pitch = pitch + (float) M_PI_2;
 
 	up.x = (float)(cos(yaw) * cos(up_pitch));
 	up.y = (float)sin(up_pitch);

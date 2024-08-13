@@ -221,6 +221,7 @@ void App::glew_init()
 #endif
 
 	std::cout << "Status: Using GLEW: " << glewGetString(GLEW_VERSION) << std::endl;
+	std::cout << std::endl;
 }
 
 void App::opengl_setup()
@@ -256,6 +257,7 @@ void App::load_models(const std::string& model_path)
 	for (auto const& entry : std::filesystem::directory_iterator{ model_path }) {
 		models.emplace_back(std::make_unique<Model>(string_from_path(entry.path())));
 	}
+	std::cout << std::endl;
 
 	// hard coded view plane
 	std::vector<Vertex> vertices = {
@@ -363,6 +365,7 @@ void App::setup_placeable_cameras(const std::string& cameras_path, float near_pl
 			));
 		}
 	}
+	std::cout << std::endl;
 }
 
 void App::resize_resources()
@@ -442,7 +445,7 @@ int main(int argc, char* argv[])
 
 	// start application
 	try {
-		App app{ 800, 600, program.get("-c"), program.get("-m"), program.get("-o"), glm::radians(45.0), 0.1, 25.0};
+		App app{ 800, 600, program.get("-c"), program.get("-m"), program.get("-o"), glm::radians(45.0f), 0.1f, 25.0f};
 		g_app = &app;
 
 		app.run();
@@ -487,6 +490,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GL
 		case GL_DEBUG_SOURCE_THIRD_PARTY: return "THIRD PARTY";
 		case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
 		case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+		default: return "SOURCE NOT FOUND";
 		}
 		}();
 
@@ -500,6 +504,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GL
 		case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
 		case GL_DEBUG_TYPE_MARKER: return "MARKER";
 		case GL_DEBUG_TYPE_OTHER: return "OTHER";
+		default: return "TYPE NOT FOUND";
 		}
 		}();
 
@@ -509,6 +514,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GL
 		case GL_DEBUG_SEVERITY_LOW: return "LOW";
 		case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
 		case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+		default: return "SEVERITY NOT FOUND";
 		}
 		}();
 	std::cout << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message << '\n';

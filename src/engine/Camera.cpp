@@ -2,7 +2,7 @@
 
 
 Camera::Camera(glm::vec3 pos, glm::vec3 des, glm::vec3 up, unsigned int res_x, unsigned int res_y, float focx, float focy, float near_plane, float far_plane)
-	: Camera(pos, des, up, res_x, res_y, std::tanf(foc_y / foc_x * 0.5) * 2, near_plane, far_plane)
+	: Camera(pos, des, up, res_x, res_y, std::tanf(foc_y / foc_x * 0.5f) * 2, near_plane, far_plane)
 {
 	foc_x = focx;
 	foc_y = focy;

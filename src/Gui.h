@@ -16,19 +16,19 @@
 struct GuiOutput {
 	unsigned int selected_camera_type = 0;
 
-	float placement_distance = 0.1;
+	float placement_distance = 0.1f;
 
 
 	float camera_near_plane;
 	float camera_far_plane;
-	float camera_rotation_speed = 0.001;
-	float camera_movement_speed = 5.0;
+	float camera_rotation_speed = 0.001f;
+	float camera_movement_speed = 5.0f;
 
 	bool preview_frustums = true;
 	bool preview_icon = true;
 	// updating those will only change the next camera placed
-	float preview_far_plane_scale = 0.25;
-	float preview_icon_scale = 0.05;
+	float preview_far_plane_scale = 0.25f;
+	float preview_icon_scale = 0.05f;
 
 	bool toggle_aabb_drawing = false;
 	bool toggle_frustum_culling = false;

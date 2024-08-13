@@ -1,6 +1,11 @@
 #include "Exporter.h"
 
-#include "opencv2/calib3d/calib3d.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/transform.hpp"
+
+#include "engine/Helper.h"
+#include "engine/Camera.h"
+#include "engine/Exception.h"
 
 // modify as needed
 void export_cameras_to_file(const std::vector<std::shared_ptr<CameraPreview>>& placed_cameras, const std::string& path, ExportSettings settings) {

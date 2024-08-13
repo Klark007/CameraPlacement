@@ -28,7 +28,7 @@ private:
 	const Material material = Material(
 		aiColor4t<float>(0),
 		aiColor4t<float>(0),
-		aiColor4t<float>(0.75, 0.9, 0.2, 1.0),
+		aiColor4t<float>(0.75f, 0.9f, 0.2f, 1.0f),
 		aiColor4t<float>(0),
 		0
 	);

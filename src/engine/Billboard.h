@@ -7,8 +7,6 @@
 #include "Texture.h"
 #include "Material.h"
 
-#include "Camera.h"
-
 #include <memory>
 
 class Billboard {

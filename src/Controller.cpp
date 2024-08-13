@@ -2,10 +2,8 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
-#include "glm/gtx/quaternion.hpp"
 
-#include <iostream>
-
+#include "Exporter.h"
 #include "engine/Helper.h"
 
 Controller::Controller(std::shared_ptr<Camera> fly_cam, std::vector<std::shared_ptr<Camera>> cam_types, std::vector<std::shared_ptr<Texture>> camera_logos, std::vector<std::string> camera_labels, double res_x, double res_y, const std::string& output_folder)
@@ -110,8 +108,8 @@ void Controller::handle_mouse(double xpos, double ypos)
 
 	if (dx != 0 || dy != 0) {
 		// update yaw and pitch of camera
-		current_camera->roll_yaw((current_camera->points_up() ? dx : -dx) * rot_strength);
-		current_camera->roll_pitch(-dy * rot_strength);
+		current_camera->roll_yaw((float) (current_camera->points_up() ? dx : -dx) * rot_strength);
+		current_camera->roll_pitch((float) (- dy * rot_strength));
 	}
 
 	xlast = xpos;
@@ -153,7 +151,7 @@ bool Controller::place_camera(GLFWwindow* window, std::shared_ptr<Renderpass> re
 			
 			// invert cameras direction
 			float pitch = -current_camera->get_pitch();
-			float yaw = current_camera->get_yaw() + M_PI;
+			float yaw = current_camera->get_yaw() + (float) M_PI;
 
 			// switch cameras
 			current_camera = camera_types.at(current_camera_type);

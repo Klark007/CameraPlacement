@@ -1,12 +1,6 @@
 #pragma once
 
-#include "engine/Exception.h"
-#include "engine/Camera.h"
-#include "engine/Helper.h"
 #include "CameraPreview.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtx/transform.hpp"
 
 #include <iostream>
 #include <fstream>

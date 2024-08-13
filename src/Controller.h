@@ -7,7 +7,6 @@
 #include "engine/Renderpass.h"
 #include "CameraPreview.h"
 #include "Gui.h"
-#include "Exporter.h"
 
 #include <memory>
 #include <vector>
@@ -29,8 +28,8 @@ public:
 private:
 	std::shared_ptr<Camera> current_camera;
 
-	float rot_strength = 0.001;
-	float move_strength = 5.0;
+	float rot_strength = 0.001f;
+	float move_strength = 5.0f;
 
 	// previous mouse position
 	double xlast;

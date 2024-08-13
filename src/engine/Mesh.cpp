@@ -2,12 +2,6 @@
 
 #include <GL/glew.h>
 
-// find next multiple of alignment starting from size
-GLsizei align(GLsizei size, GLsizei alignment) {
-	// compute the size / alignment rounded up and multiply by alignment
-	return (size + alignment - 1) / alignment * alignment;
-}
-
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Index> indices, unsigned int vertices_per_face)
 	: vertices{ vertices }, indices{ indices }, vertices_per_face{ vertices_per_face }
 {

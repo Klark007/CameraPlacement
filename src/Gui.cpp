@@ -63,7 +63,7 @@ void GUI::render(std::vector<std::shared_ptr<CameraPreview>>& placed_cameras)
 				// show icon in drop down selection
 				std::shared_ptr<Texture> texture = camera_logos.at(i);
 				ImGui::SameLine(); 
-				ImGui::Image((void*)texture->get_id(), ImVec2(texture->get_width() / 64, texture->get_height() / 64));
+				ImGui::Image((void*)texture->get_id(), ImVec2((float) texture->get_width() / 64, (float) texture->get_height() / 64));
 
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
@@ -95,7 +95,7 @@ void GUI::render(std::vector<std::shared_ptr<CameraPreview>>& placed_cameras)
 	{
 		if (ImGui::TreeNode("Camera movement")) {
 			ImGui::SliderFloat("Camera movement speed", &output.camera_movement_speed, 1.0f, 25.0f);
-			ImGui::SliderFloat("Camera rotation speed", &output.camera_rotation_speed, 0.0005, 0.005);
+			ImGui::SliderFloat("Camera rotation speed", &output.camera_rotation_speed, 0.0005f, 0.005f);
 
 			ImGui::TreePop();
 		}
