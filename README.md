@@ -13,6 +13,9 @@ An OpenGL app for placing calibrated cameras into 3d models.
 ![Render](https://github.com/Klark007/CameraPlacement/blob/main/Preview.PNG)
 *Preview from a Kinect placed in the room*
 
+![Render](https://github.com/Klark007/CameraPlacement/blob/main/Frustum.PNG)
+*Showing placed camera's frustum*
+
 ## Controls
 - WASD for movement, Mouse for Looking around.
 - Enter goes into preview mode for in GUI selected camera. While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
