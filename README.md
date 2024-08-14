@@ -5,7 +5,7 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - Model loading using Assimp
 - MSAA anti-aliasing
 - Frustum Culling
-- Using camera calibrations for accurate previews
+- Using camera calibrations for accurate previews from the camera's perspective
 
 ![Render](https://github.com/Klark007/CameraPlacement/blob/main/Render.PNG)
 *View from camera flying around scene*
@@ -20,6 +20,8 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - WASD for movement, Mouse for Looking around.
 - Enter goes into preview mode for in GUI selected camera. While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
 - Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
+- Pressing E exports the currently placed cameras into csv files
+- The list of cameras can be seen in the GUI and misplaced cameras can be removed
 
 ## Commandline rguments
 - -cwd: Path to which all paths below are relative to
