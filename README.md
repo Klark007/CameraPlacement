@@ -20,9 +20,12 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - WASD for movement, Mouse for Looking around.
 - Enter goes into preview mode for in GUI selected camera. While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
 - Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
-- E for export 
+- E for export
 
-## Commandline rguments
+## Camera Placement Video Instructions
+[![Watch the video](https://github.com/Klark007/CameraPlacement/blob/dev/media/Render.PNG)](https://github.com/Klark007/CameraPlacement/blob/dev/media/Camera%20Placement%20Instructions.mp4)
+
+## Commandline arguments
 - -cwd: Path to which all paths below are relative to
 - -c or --cameras: Path to folder where camera icon, intrinics and optionally transforms (for stereo cameras) are stored
 - -m or --models: Path to folder where models to be used are stored
