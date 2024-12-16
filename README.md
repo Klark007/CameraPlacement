@@ -23,7 +23,7 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - E for export
 
 ## Camera Placement Video Instructions
-[![Watch the video](https://github.com/Klark007/CameraPlacement/blob/dev/media/Render.PNG)](https://github.com/Klark007/CameraPlacement/blob/dev/media/Camera%20Placement%20Instructions.mp4)
+[![CameraPlacementInstructions](https://img.youtube.com/vi/Hx9r8s3ZA74/0.jpg)](https://www.youtube.com/watch?v=Hx9r8s3ZA74)
 
 ## Commandline arguments
 - -cwd: Path to which all paths below are relative to
