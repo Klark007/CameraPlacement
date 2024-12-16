@@ -37,6 +37,11 @@ One folder per camera in the path given by -c (by default cameras/). Folder name
 - icon.png: Icon of the camera used for gui. Ideally 1024x1024 pixels
 - intrinics.csv: Calibrated intrinsics of camera with format: fx, fy, cx, cy. The app assumes that the resolution of the camera is (2 x c_x, 2 x c_y)
 
+## Adding Objects to the Room
+In order to add or modify objects used by the CameraPlacement App, you can add models in the models/default folder as Collada (.dae) files. 
+These files can be obtained by exporting them directly from the OR-X Digital Twin file used in the https://github.com/BAL-ROCS-BUT-COOL/SyntheticDataORX repo.
+Make sure their size does not exceed 100MB as this decreases the speed of the App significantly and can even lead to crashes.
+
 ## Installation
 Build either using Visual Studio directly
 
