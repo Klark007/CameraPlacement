@@ -20,7 +20,8 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - WASD for movement, Mouse for Looking around.
 - Enter goes into preview mode for in GUI selected camera. While in preview mode Escape leaves Preview mode without adding to the list of placed cameras while pressing Enter adds the camera.
 - Pressing space anytime switches to the GUI mode where settings might be changed. Pressing space again leaves the GUI mode.
-- E for export
+- Pressing E exports the currently placed cameras into csv files
+- The list of cameras can be seen in the GUI and misplaced cameras can be removed
 
 ## Camera Placement Video Instructions
 [![CameraPlacementInstructions](https://img.youtube.com/vi/Hx9r8s3ZA74/0.jpg)](https://www.youtube.com/watch?v=Hx9r8s3ZA74)
