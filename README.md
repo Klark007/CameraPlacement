@@ -5,7 +5,7 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - Model loading using Assimp
 - MSAA anti-aliasing
 - Frustum Culling
-- Using camera calibrations for accurate previews
+- Using camera calibrations for accurate previews from the camera's perspective
 
 ![Render](https://github.com/Klark007/CameraPlacement/blob/dev/media/Render.PNG)
 *View from camera flying around scene*
