@@ -56,3 +56,7 @@ Add lib files for GLFW, GLEW, Assimp, OpenCV to external/lib. Link to libGL.so i
 ## Acknowledgments
 The app was created during a stay at the Research in Orthopedic Computer Science Group (ROCS) at Balgrist Hospital Zurich. The assets are taken from paper "Creating a Digital Twin of Spinal Surgery: A Proof of Concept".
 This work has been supported by the OR-X - a swiss national research infrastructure for translational surgery - and associated funding by the University of Zurich and University Hospital Balgrist.
+
+## Credits 
+
+- **Lilian Calvet**: Conceptual Designer
