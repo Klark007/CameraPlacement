@@ -1,0 +1,15 @@
+{
+  "dependencies": [
+    "glew",
+    "glfw3",
+    "argparse",
+    "stb",
+    "rapidcsv",
+    "assimp",
+    "opencv2",
+    "glm",
+    "vcpkg-tool-ninja",
+    {"name": "imgui",
+     "features": ["glfw-binding", "opengl3-binding"]}
+  ]
+}

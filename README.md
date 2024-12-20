@@ -42,16 +42,53 @@ In order to add or modify objects used by the CameraPlacement App, you can add m
 These files can be obtained by exporting them directly from the OR-X Digital Twin file used in the https://github.com/BAL-ROCS-BUT-COOL/SyntheticDataORX repo.
 Make sure their size does not exceed 100MB as this decreases the speed of the App significantly and can even lead to crashes.
 
-## Installation
-Build either using Visual Studio directly
+## Installation / Compilation
 
-## Dependencies
+### Dependencies
+C++ 20 or newer
+vcpckg installation
 
-C++ 17 or newer
-GLFW, GLEW, GLM, Assimp, stb_image, rapidcsv, argparse, opencv
+#### Vcpckg Installation
+Most Dependencies are managed by `vcpkg` due to cross-platform requirements.
+Check in the command prompt if you have vcpckg installed:
 
-## Linux Notes
-Add lib files for GLFW, GLEW, Assimp, OpenCV to external/lib. Link to libGL.so instead of opengl32.lib. You may also need to add following command line arguments: -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+``where vcpckg``
+
+If it is not installed, choose a place where you want to install it on your system, then run:
+
+```cmd
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg && .\bootstrap-vcpkg.bat
+set "VCPKG_ROOT=C:\path\to\vcpkg"
+set PATH=%VCPKG_ROOT%;%PATH%
+```
+
+Note that this `VCPKG_ROOT` will only persist for the shell session.
+Consider adding it as a persisting environment variable.
+
+For more details, see [here](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-bash).
+
+
+### Linux Compilation
+Linux Compilation is currently not supported for this repo.
+
+<!-- Add lib files for GLFW, GLEW, Assimp, OpenCV to external/lib. Link to libGL.so instead of opengl32.lib. You may also need to add following command line arguments: -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl -->
+
+### Compilation
+
+There are two presets available for compilation:
+- x64-release
+- x64-debug
+
+Run the following commands for one of two presets in the Visual Studio Console:
+
+``cmake --preset <x64-release|x64-debug>``
+
+This compiles the necessary files and directories for the building of the app. This is by default done in the out/build/peset-name folder Next build the app:
+
+``cmake --build out/build/<preset-name>``
+
+You can then follow the instructions for executing the app.
 
 ## Acknowledgments
 The app was created during a stay at the Research in Orthopedic Computer Science Group (ROCS) at Balgrist Hospital Zurich. The assets are taken from paper "Creating a Digital Twin of Spinal Surgery: A Proof of Concept".
@@ -59,4 +96,5 @@ This work has been supported by the OR-X - a swiss national research infrastruct
 
 ## Credits 
 
+- **Jan Grunder**: Main Author
 - **Lilian Calvet**: Conceptual Designer

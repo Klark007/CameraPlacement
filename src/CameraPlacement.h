@@ -12,7 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "rapidcsv.h"
-#include "argparse.hpp"
+#include "argparse/argparse.hpp"
 
 #include "engine/Exception.h"
 
