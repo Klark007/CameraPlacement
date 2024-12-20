@@ -80,11 +80,11 @@ There are two presets available for compilation:
 
 Run the following commands for one of two presets in the Visual Studio Console:
 
-``cmake --preset <x64-release|x64-debug>``
+``cmake --preset [x64-release|x64-debug]``
 
 This compiles the necessary files and directories for the building of the app. This is by default done in the out/build/peset-name folder Next build the app:
 
-``cmake --build out/build/<preset-name>``
+``cmake --build out/build/[x64-release|x64-debug]``
 
 You can then follow the instructions for executing the app.
 
