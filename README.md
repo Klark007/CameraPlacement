@@ -49,7 +49,7 @@ C++ 20 or newer
 vcpckg installation
 
 #### Vcpckg Installation
-Most Dependencies are managed by `vcpkg` due to cross-platform requirements.
+Most Dependencies are managed by `vcpkg`.
 Check in the command prompt if you have vcpckg installed:
 
 ``where vcpckg``
