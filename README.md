@@ -72,8 +72,6 @@ For more details, see [here](https://learn.microsoft.com/en-us/vcpkg/get_started
 ### Linux Compilation
 Linux Compilation is currently not supported for this repo.
 
-<!-- Add lib files for GLFW, GLEW, Assimp, OpenCV to external/lib. Link to libGL.so instead of opengl32.lib. You may also need to add following command line arguments: -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl -->
-
 ### Compilation
 
 There are two presets available for compilation:
