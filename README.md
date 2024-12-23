@@ -48,22 +48,18 @@ Make sure their size does not exceed 100MB as this decreases the speed of the Ap
 C++ 20 or newer
 vcpckg installation
 
-#### Installation using Visual Studio
+#### Installation using Visual Studio Build Tools
 
-The easiest way to install all dependencies on Windows is by using Visual Studio. Open Visual Studio and make sure that `vcpkg` and `cmake` are installed using 
+The easiest way to install all dependencies on Windows is by using `Visual Studio Build Tools`. Download it from [here](https://visualstudio.microsoft.com/downloads/?q=build+tools) (make sure to scroll down to the "All Downloads" section). Then in the `Visual Studio Installer` choose  `Desktop development with C++` and ensure that at least the following optional features are checked:
+- `MSVC v143` or higher
+- `Windows 11 SDK`
+- `C++ CMake tools for Windows`
+- `Testing tools core features - Build Tools`
+- `C++ AddressSanitizer`
 
-```cmd
-where vcpkg
-where cmake
-```
+Not all of these options may be necessary, but this matches development environments.
 
-If any of them is not installed, proceed by installing **Desktop development with C++** tools with the Visual Studio installer.
-
-1. Select `Tools > Get Tools and Features...`
-2. Select `Desktop development with C++`
-3. Keep the default selection and install by clicking the `Modify` button
-
-After installation, open Visual Studio and click `Continue without code` and open the console under `View > Terminal`. Make sure to switch to Developer Command Prompt in case Power Shell is opened as default.
+In the following, for all installation commands, open the console by searching for `x64 Native Tools Command Prompt for VS 2022`.
 
 ##### Manual Vcpckg Installation
 Most Dependencies are managed by `vcpkg`, which you can alternatively install manually.
@@ -95,7 +91,7 @@ There are two presets available for compilation:
 - x64-release
 - x64-debug
 
-Run the following commands for one of two presets in the Visual Studio Console:
+Run the following commands for one of two presets in the `x64 Native Tools Command Prompt for VS 2022` console:
 
 ``cmake --preset [x64-release|x64-debug]``
 
