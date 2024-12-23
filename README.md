@@ -48,8 +48,25 @@ Make sure their size does not exceed 100MB as this decreases the speed of the Ap
 C++ 20 or newer
 vcpckg installation
 
-#### Vcpckg Installation
-Most Dependencies are managed by `vcpkg`.
+#### Installation using Visual Studio
+
+The easiest way to install all dependencies on Windows is by using Visual Studio. Open Visual Studio and make sure that `vcpkg` and `cmake` are installed using 
+
+```cmd
+where vcpkg
+where cmake
+```
+
+If any of them is not installed, proceed by installing **Desktop development with C++** tools with the Visual Studio installer.
+
+1. Select `Tools > Get Tools and Features...`
+2. Select `Desktop development with C++`
+3. Keep the default selection and install by clicking the `Modify` button
+
+After installation, open Visual Studio and click `Continue without code` and open the console under `View > Terminal`. Make sure to switch to Developer Command Prompt in case Power Shell is opened as default.
+
+##### Manual Vcpckg Installation
+Most Dependencies are managed by `vcpkg`, which you can alternatively install manually.
 Check in the command prompt if you have vcpckg installed:
 
 ``where vcpckg``
