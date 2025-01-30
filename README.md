@@ -7,13 +7,13 @@ An OpenGL app for placing calibrated cameras into 3d models.
 - Frustum Culling
 - Using camera calibrations for accurate previews from the camera's perspective
 
-![Render](https://github.com/Klark007/CameraPlacement/blob/dev/media/Render.PNG)
+![Render](https://github.com/Klark007/CameraPlacement/blob/main/media/Render.PNG)
 *View from camera flying around scene*
 
-![Render](https://github.com/Klark007/CameraPlacement/blob/dev/media/Preview.PNG)
+![Render](https://github.com/Klark007/CameraPlacement/blob/main/media/Preview.PNG)
 *Preview from a Kinect placed in the room*
 
-![Render](https://github.com/Klark007/CameraPlacement/blob/dev/media/Frustum.PNG)
+![Render](https://github.com/Klark007/CameraPlacement/blob/main/media/Frustum.PNG)
 *Displaying placed camera's frustum*
 
 ## Controls
